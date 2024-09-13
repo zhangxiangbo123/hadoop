@@ -1,0 +1,178 @@
+From 9c5edc9fe5b54c6efa6e6f55cc0739add038d2c0 Mon Sep 17 00:00:00 2001
+From: zhangxiangbo123 <imzhangxiangbo@gmail.com>
+Date: Wed, 11 Sep 2024 15:41:09 +0800
+Subject: [PATCH] add-support-for-riscv64
+
+---
+ build.gradle                            | 2 ++
+ buildscripts/kokoro/linux_artifacts.sh  | 4 ++++
+ buildscripts/kokoro/unix.sh             | 6 ++++--
+ buildscripts/kokoro/upload_artifacts.sh | 3 +++
+ buildscripts/make_dependencies.sh       | 6 ++++--
+ compiler/build.gradle                   | 4 +++-
+ compiler/check-artifact.sh              | 6 ++++++
+ settings.gradle                         | 2 +-
+ 8 files changed, 27 insertions(+), 6 deletions(-)
+
+diff --git a/build.gradle b/build.gradle
+index 7270fcdb9..78bfbfd9c 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -23,6 +23,8 @@ subprojects {
+     version = "1.53.0" // CURRENT_GRPC_VERSION
+ 
+     repositories {
++	maven { url 'file://@HOME@/.m2/repository'}
++	maven { url "https://mirrors.huaweicloud.com/repository/maven/"}
+         maven { // The google mirror is less flaky than mavenCentral()
+             url "https://maven-central.storage-download.googleapis.com/maven2/" }
+         mavenCentral()
+diff --git a/buildscripts/kokoro/linux_artifacts.sh b/buildscripts/kokoro/linux_artifacts.sh
+index 619917bdc..6d97af6fc 100755
+--- a/buildscripts/kokoro/linux_artifacts.sh
++++ b/buildscripts/kokoro/linux_artifacts.sh
+@@ -53,3 +53,7 @@ SKIP_TESTS=true ARCH=aarch_64 "$GRPC_JAVA_DIR"/buildscripts/kokoro/unix.sh
+ # for ppc64le platform
+ sudo apt-get install -y g++-powerpc64le-linux-gnu
+ SKIP_TESTS=true ARCH=ppcle_64 "$GRPC_JAVA_DIR"/buildscripts/kokoro/unix.sh
++
++# for riscv64 platform
++sudo apt-get install -y g++-riscv64-linux-gnu
++SKIP_TESTS=true ARCH=riscv64 "$GRPC_JAVA_DIR"/buildscripts/kokoro/unix.sh
+diff --git a/buildscripts/kokoro/unix.sh b/buildscripts/kokoro/unix.sh
+index 828a599ff..114cd6f2e 100755
+--- a/buildscripts/kokoro/unix.sh
++++ b/buildscripts/kokoro/unix.sh
+@@ -11,6 +11,8 @@
+ #  ARCH=aarch_64 ./buildscripts/kokoro/unix.sh
+ # For ppc64le arch:
+ #  ARCH=ppcle_64 ./buildscripts/kokoro/unix.sh
++# For riscv64 arch:
++#  ARCH=riscv64 ./buildscripts/kokoro/unix.sh
+ 
+ # This script assumes `set -e`. Removing it may lead to undefined behavior.
+ set -exu -o pipefail
+@@ -38,7 +40,7 @@ GRADLE_FLAGS+=" -Pcheckstyle.ignoreFailures=false"
+ GRADLE_FLAGS+=" -PfailOnWarnings=true"
+ GRADLE_FLAGS+=" -PerrorProne=true"
+ GRADLE_FLAGS+=" -PskipAndroid=true"
+-GRADLE_FLAGS+=" -Dorg.gradle.parallel=true"
++GRADLE_FLAGS+=" -Dorg.gradle.parallel=false"
+ export GRADLE_OPTS="-Dorg.gradle.jvmargs='-Xmx1g'"
+ 
+ # Make protobuf discoverable by :grpc-compiler
+@@ -91,7 +93,7 @@ fi
+ LOCAL_MVN_TEMP=$(mktemp -d)
+ # Note that this disables parallel=true from GRADLE_FLAGS
+ if [[ -z "${ALL_ARTIFACTS:-}" ]]; then
+-  if [[ "$ARCH" = "aarch_64" || "$ARCH" = "ppcle_64" ]]; then
++  if [[ "$ARCH" = "aarch_64" || "$ARCH" = "ppcle_64" || $ARCH == "riscv64" ]]; then
+     GRADLE_FLAGS+=" -x grpc-compiler:generateTestProto -x grpc-compiler:generateTestLiteProto"
+     GRADLE_FLAGS+=" -x grpc-compiler:testGolden -x grpc-compiler:testLiteGolden"
+     GRADLE_FLAGS+=" -x grpc-compiler:testDeprecatedGolden -x grpc-compiler:testDeprecatedLiteGolden"
+diff --git a/buildscripts/kokoro/upload_artifacts.sh b/buildscripts/kokoro/upload_artifacts.sh
+index ade37ee89..742d50dbe 100644
+--- a/buildscripts/kokoro/upload_artifacts.sh
++++ b/buildscripts/kokoro/upload_artifacts.sh
+@@ -37,6 +37,9 @@ LOCAL_OTHER_ARTIFACTS="$KOKORO_GFILE_DIR"/github/grpc-java/artifacts/
+ # for linux ppc64le platform
+ [[ "$(find "$LOCAL_MVN_ARTIFACTS" -type f -iname 'protoc-gen-grpc-java-*-linux-ppcle_64.exe' | wc -l)" != '0' ]]
+ 
++# for linux riscv64 platform
++[[ "$(find "$LOCAL_MVN_ARTIFACTS" -type f -iname 'protoc-gen-grpc-java-*-linux-riscv64.exe' | wc -l)" != '0' ]]
++
+ # from macos job:
+ [[ "$(find "$LOCAL_MVN_ARTIFACTS" -type f -iname 'protoc-gen-grpc-java-*-osx-x86_64.exe' | wc -l)" != '0' ]]
+ # copy all x86 artifacts to aarch until native artifacts are built
+diff --git a/buildscripts/make_dependencies.sh b/buildscripts/make_dependencies.sh
+index 0940132ee..bf072c9d1 100755
+--- a/buildscripts/make_dependencies.sh
++++ b/buildscripts/make_dependencies.sh
+@@ -7,8 +7,8 @@ PROTOBUF_VERSION=21.7
+ 
+ # ARCH is x86_64 bit unless otherwise specified.
+ ARCH="${ARCH:-x86_64}"
+-DOWNLOAD_DIR=/tmp/source
+-INSTALL_DIR="/tmp/protobuf-cache/$PROTOBUF_VERSION/$(uname -s)-$ARCH"
++DOWNLOAD_DIR=/var/tmp/source
++INSTALL_DIR="/var/tmp/protobuf-cache/$PROTOBUF_VERSION/$(uname -s)-$ARCH"
+ mkdir -p $DOWNLOAD_DIR
+ 
+ # Start with a sane default
+@@ -40,6 +40,8 @@ else
+     ./configure --disable-shared --host=powerpc64le-linux-gnu --prefix="$INSTALL_DIR"
+   elif [[ "$ARCH" == loongarch* ]]; then
+     ./configure --disable-shared --host=loongarch64-unknown-linux-gnu --prefix="$INSTALL_DIR"
++  elif [[ "$ARCH" == riscv* ]]; then
++    ./configure --disable-shared --host=riscv64-linux-gnu --prefix="$INSTALL_DIR"  
+   fi
+   # the same source dir is used for 32 and 64 bit builds, so we need to clean stale data first
+   make clean
+diff --git a/compiler/build.gradle b/compiler/build.gradle
+index c942442e6..18a959583 100644
+--- a/compiler/build.gradle
++++ b/compiler/build.gradle
+@@ -72,6 +72,7 @@ model {
+         aarch_64 { architecture "aarch_64" }
+         s390_64 { architecture "s390_64" }
+         loongarch_64 { architecture "loongarch_64" }
++	riscv64 { architecture "riscv64" }
+     }
+ 
+     components {
+@@ -82,7 +83,8 @@ model {
+                 'ppcle_64',
+                 'aarch_64',
+                 's390_64',
+-                'loongarch_64'
++                'loongarch_64',
++		'riscv64'
+             ]) {
+                 // If arch is not within the defined platforms, we do not specify the
+                 // targetPlatform so that Gradle will choose what is appropriate.
+diff --git a/compiler/check-artifact.sh b/compiler/check-artifact.sh
+index 67f01aa97..f0e3fbda6 100755
+--- a/compiler/check-artifact.sh
++++ b/compiler/check-artifact.sh
+@@ -55,12 +55,15 @@ checkArch ()
+     format="$(objdump -f "$1" | grep -o "file format .*$" | grep -o "[^ ]*$")"
+     echo Format=$format
+     if [[ "$OS" == linux ]]; then
++      host_machine="$(uname -m)";
+       if [[ "$ARCH" == x86_32 ]]; then
+         assertEq "$format" "elf32-i386" $LINENO
+       elif [[ "$ARCH" == x86_64 ]]; then
+         assertEq "$format" "elf64-x86-64" $LINENO
+       elif [[ "$ARCH" == aarch_64 ]]; then
+         assertEq "$format" "elf64-little" $LINENO
++      elif [[ "$ARCH" == riscv64 ]]; then
++	assertEq $format "elf64-littleriscv" $LINENO
+       elif [[ "$ARCH" == loongarch_64 ]]; then
+         echo $format
+ 	assertEq "$format" "elf64-loongarch" $LINENO
+@@ -121,6 +124,9 @@ checkDependencies ()
+     elif [[ "$ARCH" == ppcle_64 ]]; then
+       dump_cmd='powerpc64le-linux-gnu-objdump -x '"$1"' |grep "NEEDED"'
+       white_list="linux-vdso64\.so\.1\|libpthread\.so\.0\|libm\.so\.6\|libc\.so\.6\|ld64\.so\.2"
++    elif [[ "$ARCH" == riscv64 ]]; then
++      dump_cmd='objdump -p '"$1"' | grep NEEDED'
++      white_list="libm\.so\.6\|libc\.so\.6\|ld-linux-riscv64-lp64d\.so\.1"  
+     fi
+   elif [[ "$OS" == osx ]]; then
+     dump_cmd='otool -L '"$1"' | fgrep dylib'
+diff --git a/settings.gradle b/settings.gradle
+index 92db19a88..539736f06 100644
+--- a/settings.gradle
++++ b/settings.gradle
+@@ -5,7 +5,7 @@ pluginManagement {
+         id "com.github.johnrengelman.shadow" version "7.1.2"
+         id "com.github.kt3k.coveralls" version "2.12.0"
+         id "com.google.cloud.tools.jib" version "3.3.1"
+-        id "com.google.osdetector" version "1.7.1"
++        id "com.google.osdetector" version "1.7.2"
+         id "com.google.protobuf" version "0.9.1"
+         id "digital.wup.android-maven-publish" version "3.6.3"
+         id "me.champeau.gradle.japicmp" version "0.3.0"
+-- 
+2.43.0
+
