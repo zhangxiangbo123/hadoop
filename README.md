@@ -1,2 +1,2 @@
 # hadoop-3.4.0
-compile on riscv64
+compile hadoop-3.4.0 on riscv64
