@@ -1,0 +1,34 @@
+From 31b3117baa7ecacd75e6d1da50d6d24634e74469 Mon Sep 17 00:00:00 2001
+From: zhangxiangbo123 <imzhangxiangbo@gmail.com>
+Date: Thu, 22 Aug 2024 16:59:47 +0800
+Subject: [PATCH] Fix-build-on-riscv
+
+---
+ .../src/main/native/src/lib/primitives.h                      | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-nativetask/src/main/native/src/lib/primitives.h b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-nativetask/src/main/native/src/lib/primitives.h
+index 6d454e1dfc5..2ecbac5fa95 100644
+--- a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-nativetask/src/main/native/src/lib/primitives.h
++++ b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-nativetask/src/main/native/src/lib/primitives.h
+@@ -99,7 +99,7 @@ inline void simple_memcpy(void * dest, const void * src, size_t len) {
+ inline uint32_t bswap(uint32_t val) {
+ #ifdef __aarch64__
+   __asm__("rev %w[dst], %w[src]" : [dst]"=r"(val) : [src]"r"(val));
+-#elif defined(__ppc64__)||(__PPC64__)||(__powerpc64__)||(__loongarch64)
++#elif defined(__ppc64__)||(__PPC64__)||(__powerpc64__)||(__loongarch64)||(__riscv)
+   return  __builtin_bswap32(val);
+ #else
+   __asm__("bswap %0" : "=r" (val) : "0" (val));
+@@ -110,7 +110,7 @@ inline uint32_t bswap(uint32_t val) {
+ inline uint64_t bswap64(uint64_t val) {
+ #ifdef __aarch64__
+   __asm__("rev %[dst], %[src]" : [dst]"=r"(val) : [src]"r"(val));
+-#elif defined(__ppc64__)||(__PPC64__)||(__powerpc64__)||(__loongarch64)
++#elif defined(__ppc64__)||(__PPC64__)||(__powerpc64__)||(__loongarch64)||(__riscv)
+   return __builtin_bswap64(val);
+ #else
+ #ifdef __X64
+-- 
+2.43.0
+

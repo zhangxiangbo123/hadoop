@@ -1,0 +1,103 @@
+From 57b034f5f419be7050f3db0788ab66c8b7ae467e Mon Sep 17 00:00:00 2001
+From: zhangxiangbo123 <imzhangxiangbo@gmail.com>
+Date: Thu, 22 Aug 2024 17:14:00 +0800
+Subject: [PATCH] fix-pom
+
+---
+ hadoop-hdfs-project/hadoop-hdfs/pom.xml                |  5 +++++
+ .../pom.xml                                            | 10 ++++++++++
+ .../hadoop-yarn-server-common/pom.xml                  |  5 +++++
+ .../hadoop-yarn-server-web-proxy/pom.xml               |  5 +++++
+ .../hadoop-yarn/hadoop-yarn-server/pom.xml             |  7 +++++++
+ 5 files changed, 32 insertions(+)
+
+diff --git a/hadoop-hdfs-project/hadoop-hdfs/pom.xml b/hadoop-hdfs-project/hadoop-hdfs/pom.xml
+index b546f5f4b1f..1d8c8540a69 100644
+--- a/hadoop-hdfs-project/hadoop-hdfs/pom.xml
++++ b/hadoop-hdfs-project/hadoop-hdfs/pom.xml
+@@ -35,6 +35,11 @@ https://maven.apache.org/xsd/maven-4.0.0.xsd">
+   </properties>
+ 
+   <dependencies>
++    <dependency>
++      <groupId>org.iq80.leveldb</groupId>
++      <artifactId>leveldb-api</artifactId>
++      <version>0.12</version>
++    </dependency>
+     <dependency>
+       <groupId>org.apache.hadoop</groupId>
+       <artifactId>hadoop-auth</artifactId>
+diff --git a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-applicationhistoryservice/pom.xml b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-applicationhistoryservice/pom.xml
+index 99e94c01069..22542dfe93b 100644
+--- a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-applicationhistoryservice/pom.xml
++++ b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-applicationhistoryservice/pom.xml
+@@ -37,6 +37,16 @@
+ 
+ 
+   <dependencies>
++    <dependency>
++      <groupId>org.iq80.leveldb</groupId>
++      <artifactId>leveldb-api</artifactId>
++      <version>0.12</version>
++    </dependency>
++    <dependency>
++      <groupId>org.fusesource.hawtjni</groupId>
++      <artifactId>hawtjni-runtime</artifactId>
++      <version>1.16</version>
++    </dependency>	  
+     <dependency>
+       <groupId>javax.servlet</groupId>
+       <artifactId>javax.servlet-api</artifactId>
+diff --git a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-common/pom.xml b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-common/pom.xml
+index 8dbb54d439c..7516711578c 100644
+--- a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-common/pom.xml
++++ b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-common/pom.xml
+@@ -34,6 +34,11 @@
+   </properties>
+ 
+   <dependencies>
++    <dependency>
++      <groupId>org.iq80.leveldb</groupId>
++      <artifactId>leveldb-api</artifactId>
++      <version>0.12</version>
++    </dependency>
+     <!-- 'mvn dependency:analyze' fails to detect use of this dependency -->
+     <dependency>
+       <groupId>org.apache.hadoop</groupId>
+diff --git a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-web-proxy/pom.xml b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-web-proxy/pom.xml
+index 4f6a75824f5..1c2843b3b20 100644
+--- a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-web-proxy/pom.xml
++++ b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-web-proxy/pom.xml
+@@ -32,6 +32,11 @@
+   </properties>
+ 
+   <dependencies>
++    <dependency>
++      <groupId>org.iq80.leveldb</groupId>
++      <artifactId>leveldb-api</artifactId>
++      <version>0.12</version>
++    </dependency>	  
+     <dependency>
+       <groupId>javax.servlet</groupId>
+       <artifactId>javax.servlet-api</artifactId>
+diff --git a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/pom.xml b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/pom.xml
+index bc89f53f578..137c8a1f77c 100644
+--- a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/pom.xml
++++ b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/pom.xml
+@@ -32,6 +32,13 @@
+   </properties>
+ 
+   <!-- Do not add dependencies here, add them to the POM of the leaf module -->
++  <dependencies>
++    <dependency>
++      <groupId>org.fusesource.leveldbjni</groupId>
++      <artifactId>leveldbjni</artifactId>
++      <version>1.8</version>
++    </dependency>
++  </dependencies>
+ 
+   <modules>
+     <module>hadoop-yarn-server-common</module>
+-- 
+2.43.0
+

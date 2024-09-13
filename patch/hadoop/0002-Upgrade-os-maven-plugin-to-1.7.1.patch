@@ -1,0 +1,25 @@
+From 4783703cd7498362e52e322152cee3ccdb1ca0f5 Mon Sep 17 00:00:00 2001
+From: zhangxiangbo123 <imzhangxiangbo@gmail.com>
+Date: Thu, 22 Aug 2024 16:56:17 +0800
+Subject: [PATCH] Upgrade-os-maven-plugin-to-1.7.1
+
+---
+ hadoop-project/pom.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/hadoop-project/pom.xml b/hadoop-project/pom.xml
+index 0ed96d087bc..3ab01cb48ff 100644
+--- a/hadoop-project/pom.xml
++++ b/hadoop-project/pom.xml
+@@ -153,7 +153,7 @@
+ 
+     <protobuf-compile.version>3.5.1</protobuf-compile.version>
+     <grpc.version>1.10.0</grpc.version>
+-    <os-maven-plugin.version>1.7.0</os-maven-plugin.version>
++    <os-maven-plugin.version>1.7.1</os-maven-plugin.version>
+ 
+     <!-- define the Java language version used by the compiler -->
+     <javac.version>1.8</javac.version>
+-- 
+2.43.0
+

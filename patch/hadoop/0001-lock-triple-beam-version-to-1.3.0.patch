@@ -1,0 +1,26 @@
+From 28da71376b2bf39d8d16de9ad2247126ed02d181 Mon Sep 17 00:00:00 2001
+From: zhangxiangbo123 <imzhangxiangbo@gmail.com>
+Date: Thu, 22 Aug 2024 16:52:06 +0800
+Subject: [PATCH] lock-triple-beam-version-to-1.3.0
+
+---
+ .../hadoop-yarn-applications-catalog-webapp/package.json       | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-applications/hadoop-yarn-applications-catalog/hadoop-yarn-applications-catalog-webapp/package.json b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-applications/hadoop-yarn-applications-catalog/hadoop-yarn-applications-catalog-webapp/package.json
+index 59cc3da179f..68d411bacee 100644
+--- a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-applications/hadoop-yarn-applications-catalog/hadoop-yarn-applications-catalog-webapp/package.json
++++ b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-applications/hadoop-yarn-applications-catalog/hadoop-yarn-applications-catalog-webapp/package.json
+@@ -14,6 +14,9 @@
+         "bootstrap": "~3.3.7",
+         "roboto-fontface": "0.10.0"
+     },
++    "resolutions": { 
++        "triple-beam": "1.3.0"
++    },
+     "devDependencies": {
+         "requirejs": "^2.1.0",
+         "shelljs": "^0.2.6",
+-- 
+2.43.0
+

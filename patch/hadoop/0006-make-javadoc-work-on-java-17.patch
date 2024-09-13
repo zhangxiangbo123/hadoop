@@ -1,0 +1,2067 @@
+From 6958154fffa575d0bf4949c4199b1f3937da7443 Mon Sep 17 00:00:00 2001
+From: Cheng Pan <chengpan@apache.org>
+Date: Thu, 1 Aug 2024 23:07:27 +0800
+Subject: [PATCH 1/2] Fix javadocs for HTML5
+
+---
+ .../org/apache/hadoop/conf/Configuration.java | 46 +++++------
+ .../apache/hadoop/fs/AbstractFileSystem.java  |  2 +-
+ .../apache/hadoop/fs/ChecksumFileSystem.java  |  2 +-
+ .../java/org/apache/hadoop/fs/ChecksumFs.java |  2 +-
+ .../org/apache/hadoop/fs/FileContext.java     | 32 ++++----
+ .../java/org/apache/hadoop/fs/FileSystem.java | 28 +++----
+ .../org/apache/hadoop/fs/RemoteIterator.java  |  4 +-
+ .../org/apache/hadoop/io/EnumSetWritable.java | 18 ++--
+ .../org/apache/hadoop/io/ObjectWritable.java  |  4 +-
+ .../org/apache/hadoop/io/SequenceFile.java    | 10 +--
+ .../io/compress/bzip2/CBZip2InputStream.java  |  8 +-
+ .../io/compress/bzip2/CBZip2OutputStream.java | 82 +++++++++----------
+ .../io/compress/zlib/BuiltInZlibDeflater.java |  2 +-
+ .../apache/hadoop/io/file/tfile/Chunk.java    |  4 +-
+ .../apache/hadoop/ipc/RpcClientException.java |  2 +-
+ .../org/apache/hadoop/ipc/RpcException.java   |  2 +-
+ .../apache/hadoop/ipc/RpcServerException.java |  2 +-
+ .../hadoop/ipc/UnexpectedServerException.java |  2 +-
+ .../apache/hadoop/metrics2/package-info.java  | 26 +++---
+ .../java/org/apache/hadoop/net/NetUtils.java  |  6 +-
+ .../security/AccessControlException.java      |  6 +-
+ .../authorize/AuthorizationException.java     |  6 +-
+ .../hadoop/util/GenericOptionsParser.java     |  2 +-
+ .../hadoop/util/InstrumentedReadLock.java     |  2 +-
+ .../util/InstrumentedReadWriteLock.java       |  2 +-
+ .../hadoop/util/InstrumentedWriteLock.java    |  2 +-
+ .../hadoop/util/ShutdownThreadsHelper.java    | 16 ++--
+ .../org/apache/hadoop/util/StringUtils.java   |  2 +-
+ .../apache/hadoop/ipc/MiniRPCBenchmark.java   | 12 +--
+ .../client/impl/BlockReaderLocalLegacy.java   |  2 +-
+ .../blockmanagement/DatanodeDescriptor.java   |  2 +-
+ .../namenode/EncryptionZoneManager.java       |  2 +-
+ .../hadoop/hdfs/server/namenode/NameNode.java |  2 +-
+ .../server/namenode/snapshot/DiffList.java    |  2 +-
+ .../FileDistributionCalculator.java           | 18 ++--
+ .../FileDistributionVisitor.java              | 16 ++--
+ .../org/apache/hadoop/hdfs/TestSafeMode.java  |  2 +-
+ .../datanode/TestReadOnlySharedStorage.java   |  6 +-
+ .../app/rm/preemption/AMPreemptionPolicy.java |  2 +-
+ .../hadoop/mapred/FileOutputFormat.java       | 16 ++--
+ .../org/apache/hadoop/mapred/JobConf.java     |  4 +-
+ .../org/apache/hadoop/mapred/MapRunnable.java |  2 +-
+ .../apache/hadoop/mapred/jobcontrol/Job.java  |  2 +-
+ .../mapred/join/CompositeInputFormat.java     | 12 +--
+ .../mapred/join/CompositeRecordReader.java    |  4 +-
+ .../mapred/join/OverrideRecordReader.java     |  2 +-
+ .../org/apache/hadoop/mapred/join/Parser.java |  2 +-
+ .../mapred/lib/TotalOrderPartitioner.java     |  2 +-
+ .../lib/jobcontrol/ControlledJob.java         |  2 +-
+ .../lib/join/CompositeInputFormat.java        | 12 +--
+ .../lib/join/CompositeRecordReader.java       |  4 +-
+ .../lib/join/OverrideRecordReader.java        |  2 +-
+ .../hadoop/mapreduce/lib/join/Parser.java     |  2 +-
+ .../mapreduce/lib/join/TupleWritable.java     |  2 +-
+ .../lib/output/FileOutputFormat.java          |  8 +-
+ .../lib/partition/TotalOrderPartitioner.java  | 10 +--
+ .../apache/hadoop/fs/AccumulatingReducer.java |  8 +-
+ .../org/apache/hadoop/fs/IOMapperBase.java    |  4 +-
+ .../org/apache/hadoop/fs/JHLogAnalyzer.java   | 42 +++++-----
+ .../apache/hadoop/examples/pi/package.html    | 71 ++++++++--------
+ .../hadoop/mapred/gridmix/FilePool.java       |  2 +-
+ .../streaming/io/IdentifierResolver.java      |  2 +-
+ .../org/apache/hadoop/streaming/package.html  |  2 +-
+ .../org/apache/hadoop/typedbytes/package.html |  8 +-
+ .../SignalContainerRequest.java               |  2 +-
+ .../timelineservice/ServiceMetricsSink.java   |  2 +-
+ .../yarn/security/AdminACLsManager.java       |  4 +-
+ .../hadoop/yarn/util/BoundedAppender.java     |  2 +-
+ .../yarn/server/utils/LeveldbIterator.java    |  2 +-
+ .../storage/common/BaseTable.java             |  2 +-
+ 70 files changed, 317 insertions(+), 312 deletions(-)
+
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/conf/Configuration.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/conf/Configuration.java
+index 94285a4dfb7e5..f7bf2b8703d97 100755
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/conf/Configuration.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/conf/Configuration.java
+@@ -119,7 +119,7 @@
+ /**
+  * Provides access to configuration parameters.
+  *
+- * <h3 id="Resources">Resources</h3>
++ * <h2 id="Resources">Resources</h2>
+  *
+  * <p>Configurations are specified by resources. A resource contains a set of
+  * name/value pairs as XML data. Each resource is named by either a 
+@@ -130,16 +130,16 @@
+  *
+  * <p>Unless explicitly turned off, Hadoop by default specifies two 
+  * resources, loaded in-order from the classpath: <ol>
+- * <li><tt>
++ * <li><code>
+  * <a href="{@docRoot}/../hadoop-project-dist/hadoop-common/core-default.xml">
+- * core-default.xml</a></tt>: Read-only defaults for hadoop.</li>
+- * <li><tt>core-site.xml</tt>: Site-specific configuration for a given hadoop
++ * core-default.xml</a></code>: Read-only defaults for hadoop.</li>
++ * <li><code>core-site.xml</code>: Site-specific configuration for a given hadoop
+  * installation.</li>
+  * </ol>
+  * Applications may add additional resources, which are loaded
+  * subsequent to these resources in the order they are added.
+  * 
+- * <h4 id="FinalParams">Final Parameters</h4>
++ * <h3 id="FinalParams">Final Parameters</h3>
+  *
+  * <p>Configuration parameters may be declared <i>final</i>. 
+  * Once a resource declares a value final, no subsequently-loaded 
+@@ -153,9 +153,9 @@
+  *  &lt;/property&gt;</code></pre>
+  *
+  * Administrators typically define parameters as final in 
+- * <tt>core-site.xml</tt> for values that user applications may not alter.
++ * <code>core-site.xml</code> for values that user applications may not alter.
+  *
+- * <h4 id="VariableExpansion">Variable Expansion</h4>
++ * <h3 id="VariableExpansion">Variable Expansion</h3>
+  *
+  * <p>Value strings are first processed for <i>variable expansion</i>. The
+  * available properties are:<ol>
+@@ -185,22 +185,22 @@
+  *  &lt;/property&gt;
+  *  </code></pre>
+  *
+- * <p>When <tt>conf.get("tempdir")</tt> is called, then <tt>${<i>basedir</i>}</tt>
++ * <p>When <code>conf.get("tempdir")</code> is called, then <code>${<i>basedir</i>}</code>
+  * will be resolved to another property in this Configuration, while
+- * <tt>${<i>user.name</i>}</tt> would then ordinarily be resolved to the value
++ * <code>${<i>user.name</i>}</code> would then ordinarily be resolved to the value
+  * of the System property with that name.
+- * <p>When <tt>conf.get("otherdir")</tt> is called, then <tt>${<i>env.BASE_DIR</i>}</tt>
+- * will be resolved to the value of the <tt>${<i>BASE_DIR</i>}</tt> environment variable.
+- * It supports <tt>${<i>env.NAME:-default</i>}</tt> and <tt>${<i>env.NAME-default</i>}</tt> notations.
+- * The former is resolved to "default" if <tt>${<i>NAME</i>}</tt> environment variable is undefined
++ * <p>When <code>conf.get("otherdir")</code> is called, then <code>${<i>env.BASE_DIR</i>}</code>
++ * will be resolved to the value of the <code>${<i>BASE_DIR</i>}</code> environment variable.
++ * It supports <code>${<i>env.NAME:-default</i>}</code> and <code>${<i>env.NAME-default</i>}</code> notations.
++ * The former is resolved to "default" if <code>${<i>NAME</i>}</code> environment variable is undefined
+  * or its value is empty.
+- * The latter behaves the same way only if <tt>${<i>NAME</i>}</tt> is undefined.
++ * The latter behaves the same way only if <code>${<i>NAME</i>}</code> is undefined.
+  * <p>By default, warnings will be given to any deprecated configuration 
+  * parameters and these are suppressible by configuring
+- * <tt>log4j.logger.org.apache.hadoop.conf.Configuration.deprecation</tt> in
++ * <code>log4j.logger.org.apache.hadoop.conf.Configuration.deprecation</code> in
+  * log4j.properties file.
+  *
+- * <h4 id="Tags">Tags</h4>
++ * <h3 id="Tags">Tags</h3>
+  *
+  * <p>Optionally we can tag related properties together by using tag
+  * attributes. System tags are defined by hadoop.tags.system property. Users
+@@ -220,9 +220,9 @@
+  *    &lt;tag&gt;HDFS,SECURITY&lt;/tag&gt;
+  *  &lt;/property&gt;
+  * </code></pre>
+- * <p> Properties marked with tags can be retrieved with <tt>conf
+- * .getAllPropertiesByTag("HDFS")</tt> or <tt>conf.getAllPropertiesByTags
+- * (Arrays.asList("YARN","SECURITY"))</tt>.</p>
++ * <p> Properties marked with tags can be retrieved with <code>conf
++ * .getAllPropertiesByTag("HDFS")</code> or <code>conf.getAllPropertiesByTags
++ * (Arrays.asList("YARN","SECURITY"))</code>.</p>
+  */
+ @InterfaceAudience.Public
+ @InterfaceStability.Stable
+@@ -576,7 +576,7 @@ public static void addDeprecations(DeprecationDelta[] deltas) {
+    * It does not override any existing entries in the deprecation map.
+    * This is to be used only by the developers in order to add deprecation of
+    * keys, and attempts to call this method after loading resources once,
+-   * would lead to <tt>UnsupportedOperationException</tt>
++   * would lead to <code>UnsupportedOperationException</code>
+    * 
+    * If a key is deprecated in favor of multiple keys, they are all treated as 
+    * aliases of each other, and setting any one of them resets all the others 
+@@ -604,7 +604,7 @@ public static void addDeprecation(String key, String[] newKeys,
+    * It does not override any existing entries in the deprecation map.
+    * This is to be used only by the developers in order to add deprecation of
+    * keys, and attempts to call this method after loading resources once,
+-   * would lead to <tt>UnsupportedOperationException</tt>
++   * would lead to <code>UnsupportedOperationException</code>
+    * 
+    * If you have multiple deprecation entries to add, it is more efficient to
+    * use #addDeprecations(DeprecationDelta[] deltas) instead.
+@@ -624,7 +624,7 @@ public static void addDeprecation(String key, String newKey,
+    * It does not override any existing entries in the deprecation map.
+    * This is to be used only by the developers in order to add deprecation of
+    * keys, and attempts to call this method after loading resources once,
+-   * would lead to <tt>UnsupportedOperationException</tt>
++   * would lead to <code>UnsupportedOperationException</code>
+    * 
+    * If a key is deprecated in favor of multiple keys, they are all treated as 
+    * aliases of each other, and setting any one of them resets all the others 
+@@ -648,7 +648,7 @@ public static void addDeprecation(String key, String[] newKeys) {
+    * It does not override any existing entries in the deprecation map.
+    * This is to be used only by the developers in order to add deprecation of
+    * keys, and attempts to call this method after loading resources once,
+-   * would lead to <tt>UnsupportedOperationException</tt>
++   * would lead to <code>UnsupportedOperationException</code>
+    * 
+    * If you have multiple deprecation entries to add, it is more efficient to
+    * use #addDeprecations(DeprecationDelta[] deltas) instead.
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/AbstractFileSystem.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/AbstractFileSystem.java
+index 63b5bc7d94ac3..7988ebb7904dc 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/AbstractFileSystem.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/AbstractFileSystem.java
+@@ -247,7 +247,7 @@ protected static synchronized Map<URI, Statistics> getAllStatistics() {
+    * The main factory method for creating a file system. Get a file system for
+    * the URI's scheme and authority. The scheme of the <code>uri</code>
+    * determines a configuration property name,
+-   * <tt>fs.AbstractFileSystem.<i>scheme</i>.impl</tt> whose value names the
++   * <code>fs.AbstractFileSystem.<i>scheme</i>.impl</code> whose value names the
+    * AbstractFileSystem class.
+    * 
+    * The entire URI and conf is passed to the AbstractFileSystem factory method.
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/ChecksumFileSystem.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/ChecksumFileSystem.java
+index 716c6c5004918..586350d843997 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/ChecksumFileSystem.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/ChecksumFileSystem.java
+@@ -866,7 +866,7 @@ boolean apply(Path p) throws IOException {
+ 
+   /**
+    * Set replication for an existing file.
+-   * Implement the abstract <tt>setReplication</tt> of <tt>FileSystem</tt>
++   * Implement the abstract <code>setReplication</code> of <code>FileSystem</code>
+    * @param src file name
+    * @param replication new replication
+    * @throws IOException if an I/O error occurs.
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/ChecksumFs.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/ChecksumFs.java
+index 4820c5c3045d7..5f3e5d9b8efa9 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/ChecksumFs.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/ChecksumFs.java
+@@ -453,7 +453,7 @@ private boolean isDirectory(Path f)
+   }
+   /**
+    * Set replication for an existing file.
+-   * Implement the abstract <tt>setReplication</tt> of <tt>FileSystem</tt>
++   * Implement the abstract <code>setReplication</code> of <code>FileSystem</code>
+    * @param src file name
+    * @param replication new replication
+    * @throws IOException if an I/O error occurs.
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/FileContext.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/FileContext.java
+index eb5983f098a71..a903e337de140 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/FileContext.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/FileContext.java
+@@ -1977,9 +1977,9 @@ public RemoteIterator<LocatedFileStatus> listFiles(
+         LocatedFileStatus curFile;
+ 
+         /**
+-         * Returns <tt>true</tt> if the iterator has more files.
++         * Returns <code>true</code> if the iterator has more files.
+          *
+-         * @return <tt>true</tt> if the iterator has more files.
++         * @return <code>true</code> if the iterator has more files.
+          * @throws AccessControlException if not allowed to access next
+          *                                file's status or locations
+          * @throws FileNotFoundException if next file does not exist any more
+@@ -2071,34 +2071,34 @@ public LocatedFileStatus next() throws IOException {
+      * <dl>
+      *  <dd>
+      *   <dl>
+-     *    <dt> <tt> ? </tt>
++     *    <dt> <code> ? </code>
+      *    <dd> Matches any single character.
+      *
+-     *    <dt> <tt> * </tt>
++     *    <dt> <code> * </code>
+      *    <dd> Matches zero or more characters.
+      *
+-     *    <dt> <tt> [<i>abc</i>] </tt>
++     *    <dt> <code> [<i>abc</i>] </code>
+      *    <dd> Matches a single character from character set
+-     *     <tt>{<i>a,b,c</i>}</tt>.
++     *     <code>{<i>a,b,c</i>}</code>.
+      *
+-     *    <dt> <tt> [<i>a</i>-<i>b</i>] </tt>
++     *    <dt> <code> [<i>a</i>-<i>b</i>] </code>
+      *    <dd> Matches a single character from the character range
+-     *     <tt>{<i>a...b</i>}</tt>. Note: character <tt><i>a</i></tt> must be
+-     *     lexicographically less than or equal to character <tt><i>b</i></tt>.
++     *     <code>{<i>a...b</i>}</code>. Note: character <code><i>a</i></code> must be
++     *     lexicographically less than or equal to character <code><i>b</i></code>.
+      *
+-     *    <dt> <tt> [^<i>a</i>] </tt>
++     *    <dt> <code> [^<i>a</i>] </code>
+      *    <dd> Matches a single char that is not from character set or range
+-     *     <tt>{<i>a</i>}</tt>.  Note that the <tt>^</tt> character must occur
++     *     <code>{<i>a</i>}</code>.  Note that the <code>^</code> character must occur
+      *     immediately to the right of the opening bracket.
+      *
+-     *    <dt> <tt> \<i>c</i> </tt>
++     *    <dt> <code> \<i>c</i> </code>
+      *    <dd> Removes (escapes) any special meaning of character <i>c</i>.
+      *
+-     *    <dt> <tt> {ab,cd} </tt>
+-     *    <dd> Matches a string from the string set <tt>{<i>ab, cd</i>} </tt>
++     *    <dt> <code> {ab,cd} </code>
++     *    <dd> Matches a string from the string set <code>{<i>ab, cd</i>} </code>
+      *
+-     *    <dt> <tt> {ab,c{de,fh}} </tt>
+-     *    <dd> Matches a string from string set <tt>{<i>ab, cde, cfh</i>}</tt>
++     *    <dt> <code> {ab,c{de,fh}} </code>
++     *    <dd> Matches a string from string set <code>{<i>ab, cde, cfh</i>}</code>
+      *
+      *   </dl>
+      *  </dd>
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/FileSystem.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/FileSystem.java
+index 38ec611451750..930abf0b5d172 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/FileSystem.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/FileSystem.java
+@@ -2178,34 +2178,34 @@ public FileStatus[] listStatus(Path[] files, PathFilter filter)
+    * <dl>
+    *  <dd>
+    *   <dl>
+-   *    <dt> <tt> ? </tt>
++   *    <dt> <code> ? </code>
+    *    <dd> Matches any single character.
+    *
+-   *    <dt> <tt> * </tt>
++   *    <dt> <code> * </code>
+    *    <dd> Matches zero or more characters.
+    *
+-   *    <dt> <tt> [<i>abc</i>] </tt>
++   *    <dt> <code> [<i>abc</i>] </code>
+    *    <dd> Matches a single character from character set
+-   *     <tt>{<i>a,b,c</i>}</tt>.
++   *     <code>{<i>a,b,c</i>}</code>.
+    *
+-   *    <dt> <tt> [<i>a</i>-<i>b</i>] </tt>
++   *    <dt> <code> [<i>a</i>-<i>b</i>] </code>
+    *    <dd> Matches a single character from the character range
+-   *     <tt>{<i>a...b</i>}</tt>.  Note that character <tt><i>a</i></tt> must be
+-   *     lexicographically less than or equal to character <tt><i>b</i></tt>.
++   *     <code>{<i>a...b</i>}</code>.  Note that character <code><i>a</i></code> must be
++   *     lexicographically less than or equal to character <code><i>b</i></code>.
+    *
+-   *    <dt> <tt> [^<i>a</i>] </tt>
++   *    <dt> <code> [^<i>a</i>] </code>
+    *    <dd> Matches a single character that is not from character set or range
+-   *     <tt>{<i>a</i>}</tt>.  Note that the <tt>^</tt> character must occur
++   *     <code>{<i>a</i>}</code>.  Note that the <code>^</code> character must occur
+    *     immediately to the right of the opening bracket.
+    *
+-   *    <dt> <tt> \<i>c</i> </tt>
++   *    <dt> <code> \<i>c</i> </code>
+    *    <dd> Removes (escapes) any special meaning of character <i>c</i>.
+    *
+-   *    <dt> <tt> {ab,cd} </tt>
+-   *    <dd> Matches a string from the string set <tt>{<i>ab, cd</i>} </tt>
++   *    <dt> <code> {ab,cd} </code>
++   *    <dd> Matches a string from the string set <code>{<i>ab, cd</i>} </code>
+    *
+-   *    <dt> <tt> {ab,c{de,fh}} </tt>
+-   *    <dd> Matches a string from the string set <tt>{<i>ab, cde, cfh</i>}</tt>
++   *    <dt> <code> {ab,c{de,fh}} </code>
++   *    <dd> Matches a string from the string set <code>{<i>ab, cde, cfh</i>}</code>
+    *
+    *   </dl>
+    *  </dd>
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/RemoteIterator.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/RemoteIterator.java
+index 9238c3f6fb993..06b7728ae3e9d 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/RemoteIterator.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/RemoteIterator.java
+@@ -24,9 +24,9 @@
+  */
+ public interface RemoteIterator<E> {
+   /**
+-   * Returns <tt>true</tt> if the iteration has more elements.
++   * Returns <code>true</code> if the iteration has more elements.
+    *
+-   * @return <tt>true</tt> if the iterator has more elements.
++   * @return <code>true</code> if the iterator has more elements.
+    * @throws IOException if any IO error occurs
+    */
+   boolean hasNext() throws IOException;
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/EnumSetWritable.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/EnumSetWritable.java
+index 4b1dc7513d054..f2c8b76e2ab70 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/EnumSetWritable.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/EnumSetWritable.java
+@@ -59,10 +59,10 @@ public boolean add(E e) {
+   }
+ 
+   /**
+-   * Construct a new EnumSetWritable. If the <tt>value</tt> argument is null or
+-   * its size is zero, the <tt>elementType</tt> argument must not be null. If
+-   * the argument <tt>value</tt>'s size is bigger than zero, the argument
+-   * <tt>elementType</tt> is not be used.
++   * Construct a new EnumSetWritable. If the <code>value</code> argument is null or
++   * its size is zero, the <code>elementType</code> argument must not be null. If
++   * the argument <code>value</code>'s size is bigger than zero, the argument
++   * <code>elementType</code> is not be used.
+    * 
+    * @param value enumSet value.
+    * @param elementType elementType.
+@@ -72,7 +72,7 @@ public EnumSetWritable(EnumSet<E> value, Class<E> elementType) {
+   }
+ 
+   /**
+-   * Construct a new EnumSetWritable. Argument <tt>value</tt> should not be null
++   * Construct a new EnumSetWritable. Argument <code>value</code> should not be null
+    * or empty.
+    * 
+    * @param value enumSet value.
+@@ -83,10 +83,10 @@ public EnumSetWritable(EnumSet<E> value) {
+ 
+   /**
+    * reset the EnumSetWritable with specified
+-   * <tt>value</tt> and <tt>elementType</tt>. If the <tt>value</tt> argument
+-   * is null or its size is zero, the <tt>elementType</tt> argument must not be
+-   * null. If the argument <tt>value</tt>'s size is bigger than zero, the
+-   * argument <tt>elementType</tt> is not be used.
++   * <code>value</code> and <code>elementType</code>. If the <code>value</code> argument
++   * is null or its size is zero, the <code>elementType</code> argument must not be
++   * null. If the argument <code>value</code>'s size is bigger than zero, the
++   * argument <code>elementType</code> is not be used.
+    * 
+    * @param value enumSet Value.
+    * @param elementType elementType.
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/ObjectWritable.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/ObjectWritable.java
+index 29c06a01ad6e3..831931bdace66 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/ObjectWritable.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/ObjectWritable.java
+@@ -401,8 +401,8 @@ static Method getStaticProtobufMethod(Class<?> declaredClass, String method,
+   }
+ 
+   /**
+-   * Find and load the class with given name <tt>className</tt> by first finding
+-   * it in the specified <tt>conf</tt>. If the specified <tt>conf</tt> is null,
++   * Find and load the class with given name <code>className</code> by first finding
++   * it in the specified <code>conf</code>. If the specified <code>conf</code> is null,
+    * try load it directly.
+    *
+    * @param conf configuration.
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/SequenceFile.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/SequenceFile.java
+index 9d6727c159c06..325820d11cc1c 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/SequenceFile.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/SequenceFile.java
+@@ -91,19 +91,19 @@
+  * <p>The actual compression algorithm used to compress key and/or values can be
+  * specified by using the appropriate {@link CompressionCodec}.</p>
+  * 
+- * <p>The recommended way is to use the static <tt>createWriter</tt> methods
++ * <p>The recommended way is to use the static <code>createWriter</code> methods
+  * provided by the <code>SequenceFile</code> to chose the preferred format.</p>
+  *
+  * <p>The {@link SequenceFile.Reader} acts as the bridge and can read any of the
+  * above <code>SequenceFile</code> formats.</p>
+  *
+- * <h3 id="Formats">SequenceFile Formats</h3>
++ * <h2 id="Formats">SequenceFile Formats</h2>
+  * 
+  * <p>Essentially there are 3 different formats for <code>SequenceFile</code>s
+  * depending on the <code>CompressionType</code> specified. All of them share a
+  * <a href="#Header">common header</a> described below.
+  * 
+- * <h4 id="Header">SequenceFile Header</h4>
++ * <h3 id="Header">SequenceFile Header</h3>
+  * <ul>
+  *   <li>
+  *   version - 3 bytes of magic header <b>SEQ</b>, followed by 1 byte of actual 
+@@ -136,7 +136,7 @@
+  *   </li>
+  * </ul>
+  * 
+- * <h5>Uncompressed SequenceFile Format</h5>
++ * <h4>Uncompressed SequenceFile Format</h4>
+  * <ul>
+  * <li>
+  * <a href="#Header">Header</a>
+@@ -155,7 +155,7 @@
+  * </li>
+  * </ul>
+  *
+- * <h5>Record-Compressed SequenceFile Format</h5>
++ * <h4>Record-Compressed SequenceFile Format</h4>
+  * <ul>
+  * <li>
+  * <a href="#Header">Header</a>
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/compress/bzip2/CBZip2InputStream.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/compress/bzip2/CBZip2InputStream.java
+index 61e88d80d8ce4..116a74963a8d9 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/compress/bzip2/CBZip2InputStream.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/compress/bzip2/CBZip2InputStream.java
+@@ -38,13 +38,13 @@
+  * <p>
+  * The decompression requires large amounts of memory. Thus you should call the
+  * {@link #close() close()} method as soon as possible, to force
+- * <tt>CBZip2InputStream</tt> to release the allocated memory. See
++ * <code>CBZip2InputStream</code> to release the allocated memory. See
+  * {@link CBZip2OutputStream CBZip2OutputStream} for information about memory
+  * usage.
+  * </p>
+  *
+  * <p>
+- * <tt>CBZip2InputStream</tt> reads bytes from the compressed source stream via
++ * <code>CBZip2InputStream</code> reads bytes from the compressed source stream via
+  * the single byte {@link java.io.InputStream#read() read()} method exclusively.
+  * Thus you should consider to use a buffered source stream.
+  * </p>
+@@ -279,7 +279,7 @@ private void makeMaps() {
+   * specified stream.
+   *
+   * <p>
+-  * Although BZip2 headers are marked with the magic <tt>"Bz"</tt> this
++  * Although BZip2 headers are marked with the magic <code>"Bz"</code> this
+   * constructor expects the next byte in the stream to be the first one after
+   * the magic. Thus callers have to skip the first two bytes. Otherwise this
+   * constructor will throw an exception.
+@@ -289,7 +289,7 @@ private void makeMaps() {
+   * @throws IOException
+   *             if the stream content is malformed or an I/O error occurs.
+   * @throws NullPointerException
+-  *             if <tt>in == null</tt>
++  *             if <code>in == null</code>
+   */
+   public CBZip2InputStream(final InputStream in, READ_MODE readMode)
+       throws IOException {
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/compress/bzip2/CBZip2OutputStream.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/compress/bzip2/CBZip2OutputStream.java
+index 50bdddb8136fc..f94d1387ebc29 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/compress/bzip2/CBZip2OutputStream.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/compress/bzip2/CBZip2OutputStream.java
+@@ -37,7 +37,7 @@
+  * <p>
+  * The compression requires large amounts of memory. Thus you should call the
+  * {@link #close() close()} method as soon as possible, to force
+- * <tt>CBZip2OutputStream</tt> to release the allocated memory.
++ * <code>CBZip2OutputStream</code> to release the allocated memory.
+  * </p>
+  *
+  * <p>
+@@ -64,64 +64,64 @@
+  * &lt;code&gt;65k + (5 * blocksize)&lt;/code&gt;.
+  * </pre>
+  *
+- * <table width="100%" border="1">
++ * <table border="1">
+  * <caption>Memory usage by blocksize</caption>
+- * <colgroup> <col width="33%" > <col width="33%" > <col width="33%" >
++ * <colgroup> <col> <col> <col>
+  * </colgroup>
+  * <tr>
+- * <th align="right">Blocksize</th> <th align="right">Compression<br>
+- * memory usage</th> <th align="right">Decompression<br>
++ * <th>Blocksize</th> <th>Compression<br>
++ * memory usage</th> <th>Decompression<br>
+  * memory usage</th>
+  * </tr>
+  * <tr>
+- * <td align="right">100k</td>
+- * <td align="right">1300k</td>
+- * <td align="right">565k</td>
++ * <td>100k</td>
++ * <td>1300k</td>
++ * <td>565k</td>
+  * </tr>
+  * <tr>
+- * <td align="right">200k</td>
+- * <td align="right">2200k</td>
+- * <td align="right">1065k</td>
++ * <td>200k</td>
++ * <td>2200k</td>
++ * <td>1065k</td>
+  * </tr>
+  * <tr>
+- * <td align="right">300k</td>
+- * <td align="right">3100k</td>
+- * <td align="right">1565k</td>
++ * <td>300k</td>
++ * <td>3100k</td>
++ * <td>1565k</td>
+  * </tr>
+  * <tr>
+- * <td align="right">400k</td>
+- * <td align="right">4000k</td>
+- * <td align="right">2065k</td>
++ * <td>400k</td>
++ * <td>4000k</td>
++ * <td>2065k</td>
+  * </tr>
+  * <tr>
+- * <td align="right">500k</td>
+- * <td align="right">4900k</td>
+- * <td align="right">2565k</td>
++ * <td>500k</td>
++ * <td>4900k</td>
++ * <td>2565k</td>
+  * </tr>
+  * <tr>
+- * <td align="right">600k</td>
+- * <td align="right">5800k</td>
+- * <td align="right">3065k</td>
++ * <td>600k</td>
++ * <td>5800k</td>
++ * <td>3065k</td>
+  * </tr>
+  * <tr>
+- * <td align="right">700k</td>
+- * <td align="right">6700k</td>
+- * <td align="right">3565k</td>
++ * <td>700k</td>
++ * <td>6700k</td>
++ * <td>3565k</td>
+  * </tr>
+  * <tr>
+- * <td align="right">800k</td>
+- * <td align="right">7600k</td>
+- * <td align="right">4065k</td>
++ * <td>800k</td>
++ * <td>7600k</td>
++ * <td>4065k</td>
+  * </tr>
+  * <tr>
+- * <td align="right">900k</td>
+- * <td align="right">8500k</td>
+- * <td align="right">4565k</td>
++ * <td>900k</td>
++ * <td>8500k</td>
++ * <td>4565k</td>
+  * </tr>
+  * </table>
+  *
+  * <p>
+- * For decompression <tt>CBZip2InputStream</tt> allocates less memory if the
++ * For decompression <code>CBZip2InputStream</code> allocates less memory if the
+  * bzipped input is smaller than one block.
+  * </p>
+  *
+@@ -137,12 +137,12 @@
+ public class CBZip2OutputStream extends OutputStream implements BZip2Constants {
+ 
+   /**
+-  * The minimum supported blocksize <tt> == 1</tt>.
++  * The minimum supported blocksize <code> == 1</code>.
+   */
+   public static final int MIN_BLOCKSIZE = 1;
+ 
+   /**
+-  * The maximum supported blocksize <tt> == 9</tt>.
++  * The maximum supported blocksize <code> == 9</code>.
+   */
+   public static final int MAX_BLOCKSIZE = 9;
+ 
+@@ -566,12 +566,12 @@ private static void hbMakeCodeLengths(final byte[] len, final int[] freq,
+   *
+   * @return The blocksize, between {@link #MIN_BLOCKSIZE} and
+   *         {@link #MAX_BLOCKSIZE} both inclusive. For a negative
+-  *         <tt>inputLength</tt> this method returns <tt>MAX_BLOCKSIZE</tt>
++  *         <code>inputLength</code> this method returns <code>MAX_BLOCKSIZE</code>
+   *         always.
+   *
+   * @param inputLength
+   *            The length of the data which will be compressed by
+-  *            <tt>CBZip2OutputStream</tt>.
++  *            <code>CBZip2OutputStream</code>.
+   */
+   public static int chooseBlockSize(long inputLength) {
+     return (inputLength > 0) ? (int) Math
+@@ -579,11 +579,11 @@ public static int chooseBlockSize(long inputLength) {
+   }
+ 
+   /**
+-  * Constructs a new <tt>CBZip2OutputStream</tt> with a blocksize of 900k.
++  * Constructs a new <code>CBZip2OutputStream</code> with a blocksize of 900k.
+   *
+   * <p>
+   * <b>Attention: </b>The caller is resonsible to write the two BZip2 magic
+-  * bytes <tt>"BZ"</tt> to the specified stream prior to calling this
++  * bytes <code>"BZ"</code> to the specified stream prior to calling this
+   * constructor.
+   * </p>
+   *
+@@ -600,11 +600,11 @@ public CBZip2OutputStream(final OutputStream out) throws IOException {
+   }
+ 
+   /**
+-  * Constructs a new <tt>CBZip2OutputStream</tt> with specified blocksize.
++  * Constructs a new <code>CBZip2OutputStream</code> with specified blocksize.
+   *
+   * <p>
+   * <b>Attention: </b>The caller is resonsible to write the two BZip2 magic
+-  * bytes <tt>"BZ"</tt> to the specified stream prior to calling this
++  * bytes <code>"BZ"</code> to the specified stream prior to calling this
+   * constructor.
+   * </p>
+   *
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/compress/zlib/BuiltInZlibDeflater.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/compress/zlib/BuiltInZlibDeflater.java
+index 739788fa5f5ec..e98980f0f26aa 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/compress/zlib/BuiltInZlibDeflater.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/compress/zlib/BuiltInZlibDeflater.java
+@@ -57,7 +57,7 @@ public synchronized int compress(byte[] b, int off, int len)
+   /**
+    * reinit the compressor with the given configuration. It will reset the
+    * compressor's compression level and compression strategy. Different from
+-   * <tt>ZlibCompressor</tt>, <tt>BuiltInZlibDeflater</tt> only support three
++   * <code>ZlibCompressor</code>, <code>BuiltInZlibDeflater</code> only support three
+    * kind of compression strategy: FILTERED, HUFFMAN_ONLY and DEFAULT_STRATEGY.
+    * It will use DEFAULT_STRATEGY as default if the configured compression
+    * strategy is not supported.
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/file/tfile/Chunk.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/file/tfile/Chunk.java
+index 05e3d48a469a2..ec508c020468a 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/file/tfile/Chunk.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/file/tfile/Chunk.java
+@@ -219,8 +219,8 @@ static public class ChunkEncoder extends OutputStream {
+ 
+     /**
+      * The number of valid bytes in the buffer. This value is always in the
+-     * range <tt>0</tt> through <tt>buf.length</tt>; elements <tt>buf[0]</tt>
+-     * through <tt>buf[count-1]</tt> contain valid byte data.
++     * range <code>0</code> through <code>buf.length</code>; elements <code>buf[0]</code>
++     * through <code>buf[count-1]</code> contain valid byte data.
+      */
+     private int count;
+ 
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/ipc/RpcClientException.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/ipc/RpcClientException.java
+index 7f8d9707f9cd7..107899a9c0d4b 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/ipc/RpcClientException.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/ipc/RpcClientException.java
+@@ -38,7 +38,7 @@ public class RpcClientException extends RpcException {
+    * @param message message.
+    * @param cause that cause this exception
+    * @param cause the cause (can be retried by the {@link #getCause()} method).
+-   *          (A <tt>null</tt> value is permitted, and indicates that the cause
++   *          (A <code>null</code> value is permitted, and indicates that the cause
+    *          is nonexistent or unknown.)
+    */
+   RpcClientException(final String message, final Throwable cause) {
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/ipc/RpcException.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/ipc/RpcException.java
+index 8141333d717a8..ac687050d7cb1 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/ipc/RpcException.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/ipc/RpcException.java
+@@ -40,7 +40,7 @@ public class RpcException extends IOException {
+    * @param message message.
+    * @param cause that cause this exception
+    * @param cause the cause (can be retried by the {@link #getCause()} method).
+-   *          (A <tt>null</tt> value is permitted, and indicates that the cause
++   *          (A <code>null</code> value is permitted, and indicates that the cause
+    *          is nonexistent or unknown.)
+    */
+   RpcException(final String message, final Throwable cause) {
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/ipc/RpcServerException.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/ipc/RpcServerException.java
+index ce4aac54b6cd2..31f62d4f06fe0 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/ipc/RpcServerException.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/ipc/RpcServerException.java
+@@ -39,7 +39,7 @@ public RpcServerException(final String message) {
+    * 
+    * @param message message.
+    * @param cause the cause (can be retried by the {@link #getCause()} method).
+-   *          (A <tt>null</tt> value is permitted, and indicates that the cause
++   *          (A <code>null</code> value is permitted, and indicates that the cause
+    *          is nonexistent or unknown.)
+    */
+   public RpcServerException(final String message, final Throwable cause) {
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/ipc/UnexpectedServerException.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/ipc/UnexpectedServerException.java
+index f00948d5d5065..c683010a88029 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/ipc/UnexpectedServerException.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/ipc/UnexpectedServerException.java
+@@ -39,7 +39,7 @@ public class UnexpectedServerException extends RpcException {
+    * @param message message.
+    * @param cause that cause this exception
+    * @param cause the cause (can be retried by the {@link #getCause()} method).
+-   *          (A <tt>null</tt> value is permitted, and indicates that the cause
++   *          (A <code>null</code> value is permitted, and indicates that the cause
+    *          is nonexistent or unknown.)
+    */
+   UnexpectedServerException(final String message, final Throwable cause) {
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/metrics2/package-info.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/metrics2/package-info.java
+index 196469be9dce2..3830a58865398 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/metrics2/package-info.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/metrics2/package-info.java
+@@ -17,7 +17,7 @@
+  */
+ 
+ /**
+-  <h1>Metrics 2.0</h1>
++  <h2>Metrics 2.0</h2>
+   <ul id="toc">
+     <li><a href="#overview">Overview</a></li>
+     <li><a href="#gettingstarted">Getting Started</a></li>
+@@ -26,7 +26,7 @@
+     <li><a href="#instrumentation">Metrics Instrumentation Strategy</a></li>
+     <li><a href="#migration">Migration from previous system</a></li>
+   </ul>
+-  <h2><a name="overview">Overview</a></h2>
++  <h3><a>Overview</a></h3>
+   <p>This package provides a framework for metrics instrumentation
+     and publication.
+   </p>
+@@ -46,7 +46,7 @@ metrics from sources to sinks based on (per source/sink) configuration
+     <a href="http://wiki.apache.org/hadoop/HADOOP-6728-MetricsV2">design
+     document</a> for architecture and implementation notes.
+   </p>
+-  <h3>Sub-packages</h3>
++  <h4>Sub-packages</h4>
+   <dl>
+     <dt><code>org.apache.hadoop.metrics2.annotation</code></dt>
+     <dd>Public annotation interfaces for simpler metrics instrumentation.
+@@ -84,9 +84,9 @@ usually does not need to reference any class here.
+     </dd>
+   </dl>
+ 
+-  <h2><a name="gettingstarted">Getting started</a></h2>
+-  <h3>Implementing metrics sources</h3>
+-  <table width="99%" border="1" cellspacing="0" cellpadding="4">
++  <h3><a>Getting started</a></h3>
++  <h4>Implementing metrics sources</h4>
++  <table border="1">
+     <caption>Implementing metrics sources</caption>
+     <tbody>
+       <tr>
+@@ -153,7 +153,7 @@ record named "CacheStat" for reporting a number of statistics relating to
+     allowing generated metrics names and multiple records. In fact, the
+     annotation interface is implemented with the MetricsSource interface
+     internally.</p>
+-  <h3>Implementing metrics sinks</h3>
++  <h4>Implementing metrics sinks</h4>
+   <pre>
+   public class MySink implements MetricsSink {
+     public void putMetrics(MetricsRecord record) {
+@@ -187,7 +187,7 @@ they need to be hooked up to a metrics system. In this case (and most
+   <pre>
+   DefaultMetricsSystem.initialize("test"); // called once per application
+   DefaultMetricsSystem.register(new MyStat());</pre>
+-  <h2><a name="config">Metrics system configuration</a></h2>
++  <h2><a>Metrics system configuration</a></h2>
+   <p>Sinks are usually specified in a configuration file, say,
+   "hadoop-metrics2-test.properties", as:
+   </p>
+@@ -209,7 +209,7 @@ identify a particular sink instance. The asterisk (<code>*</code>) can be
+     for more examples.
+   </p>
+ 
+-  <h2><a name="filtering">Metrics Filtering</a></h2>
++  <h3><a>Metrics Filtering</a></h3>
+   <p>One of the features of the default metrics system is metrics filtering
+     configuration by source, context, record/tags and metrics. The least
+     expensive way to filter out metrics would be at the source level, e.g.,
+@@ -241,7 +241,7 @@ identify a particular sink instance. The asterisk (<code>*</code>) can be
+     level, respectively. Filters can be combined to optimize
+     the filtering efficiency.</p>
+ 
+-  <h2><a name="instrumentation">Metrics instrumentation strategy</a></h2>
++  <h3><a>Metrics instrumentation strategy</a></h3>
+ 
+   In previous examples, we showed a minimal example to use the
+   metrics framework. In a larger system (like Hadoop) that allows
+@@ -279,7 +279,7 @@ instrumentation interface (incrCounter0 etc.) that allows different
+     </dd>
+   </dl>
+ 
+-  <h2><a name="migration">Migration from previous system</a></h2>
++  <h3><a>Migration from previous system</a></h3>
+   <p>Users of the previous metrics system would notice the lack of
+     <code>context</code> prefix in the configuration examples. The new
+     metrics system decouples the concept for context (for grouping) with the
+@@ -289,7 +289,7 @@ metrics system decouples the concept for context (for grouping) with the
+     configure an implementation instance per context, even if you have a
+     backend that can handle multiple contexts (file, gangalia etc.):
+   </p>
+-  <table width="99%" border="1" cellspacing="0" cellpadding="4">
++  <table border="1">
+     <caption>Migration from previous system</caption>
+     <tbody>
+       <tr>
+@@ -311,7 +311,7 @@ backend that can handle multiple contexts (file, gangalia etc.):
+   <p>In the new metrics system, you can simulate the previous behavior by
+     using the context option in the sink options like the following:
+   </p>
+-  <table width="99%" border="1" cellspacing="0" cellpadding="4">
++  <table border="1">
+     <caption>Metrics2</caption>
+     <tbody>
+       <tr>
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/net/NetUtils.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/net/NetUtils.java
+index a647bb041066f..3a4f4fd37d3f8 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/net/NetUtils.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/net/NetUtils.java
+@@ -83,9 +83,9 @@ public class NetUtils {
+   /**
+    * Get the socket factory for the given class according to its
+    * configuration parameter
+-   * <tt>hadoop.rpc.socket.factory.class.&lt;ClassName&gt;</tt>. When no
++   * <code>hadoop.rpc.socket.factory.class.&lt;ClassName&gt;</code>. When no
+    * such parameter exists then fall back on the default socket factory as
+-   * configured by <tt>hadoop.rpc.socket.factory.class.default</tt>. If
++   * configured by <code>hadoop.rpc.socket.factory.class.default</code>. If
+    * this default socket factory is not configured, then fall back on the JVM
+    * default socket factory.
+    * 
+@@ -111,7 +111,7 @@ public static SocketFactory getSocketFactory(Configuration conf,
+ 
+   /**
+    * Get the default socket factory as specified by the configuration
+-   * parameter <tt>hadoop.rpc.socket.factory.default</tt>
++   * parameter <code>hadoop.rpc.socket.factory.default</code>
+    * 
+    * @param conf the configuration
+    * @return the default socket factory as specified in the configuration or
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/security/AccessControlException.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/security/AccessControlException.java
+index d0a3620d6d4b2..1ed121f9616da 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/security/AccessControlException.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/security/AccessControlException.java
+@@ -48,10 +48,10 @@ public AccessControlException() {
+   
+   /**
+    * Constructs a new exception with the specified cause and a detail
+-   * message of <tt>(cause==null ? null : cause.toString())</tt> (which
+-   * typically contains the class and detail message of <tt>cause</tt>).
++   * message of <code>(cause==null ? null : cause.toString())</code> (which
++   * typically contains the class and detail message of <code>cause</code>).
+    * @param  cause the cause (which is saved for later retrieval by the
+-   *         {@link #getCause()} method).  (A <tt>null</tt> value is
++   *         {@link #getCause()} method).  (A <code>null</code> value is
+    *         permitted, and indicates that the cause is nonexistent or
+    *         unknown.)
+    */
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/security/authorize/AuthorizationException.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/security/authorize/AuthorizationException.java
+index 79c7d1814da28..e9c3323bb5b12 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/security/authorize/AuthorizationException.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/security/authorize/AuthorizationException.java
+@@ -44,10 +44,10 @@ public AuthorizationException(String message) {
+   
+   /**
+    * Constructs a new exception with the specified cause and a detail
+-   * message of <tt>(cause==null ? null : cause.toString())</tt> (which
+-   * typically contains the class and detail message of <tt>cause</tt>).
++   * message of <code>(cause==null ? null : cause.toString())</code> (which
++   * typically contains the class and detail message of <code>cause</code>).
+    * @param  cause the cause (which is saved for later retrieval by the
+-   *         {@link #getCause()} method).  (A <tt>null</tt> value is
++   *         {@link #getCause()} method).  (A <code>null</code> value is
+    *         permitted, and indicates that the cause is nonexistent or
+    *         unknown.)
+    */
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/GenericOptionsParser.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/GenericOptionsParser.java
+index d95878b5670cd..105a8cdcef022 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/GenericOptionsParser.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/GenericOptionsParser.java
+@@ -54,7 +54,7 @@
+  * line arguments, enabling applications to easily specify a namenode, a 
+  * ResourceManager, additional configuration resources etc.
+  * 
+- * <h3 id="GenericOptions">Generic Options</h3>
++ * <h2 id="GenericOptions">Generic Options</h2>
+  * 
+  * <p>The supported generic options are:</p>
+  * <blockquote>
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/InstrumentedReadLock.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/InstrumentedReadLock.java
+index c99290bc3d3ac..e001d6775c647 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/InstrumentedReadLock.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/InstrumentedReadLock.java
+@@ -26,7 +26,7 @@
+ import org.slf4j.Logger;
+ 
+ /**
+- * This is a wrap class of a <tt>ReadLock</tt>.
++ * This is a wrap class of a <code>ReadLock</code>.
+  * It extends the class {@link InstrumentedLock}, and can be used to track
+  * whether a specific read lock is being held for too long and log
+  * warnings if so.
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/InstrumentedReadWriteLock.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/InstrumentedReadWriteLock.java
+index 758f1ff87cff7..caceb31cfb552 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/InstrumentedReadWriteLock.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/InstrumentedReadWriteLock.java
+@@ -28,7 +28,7 @@
+ /**
+  * This is a wrap class of a {@link ReentrantReadWriteLock}.
+  * It implements the interface {@link ReadWriteLock}, and can be used to
+- * create instrumented <tt>ReadLock</tt> and <tt>WriteLock</tt>.
++ * create instrumented <code>ReadLock</code> and <code>WriteLock</code>.
+  */
+ @InterfaceAudience.Private
+ @InterfaceStability.Unstable
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/InstrumentedWriteLock.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/InstrumentedWriteLock.java
+index 4637b5efe535b..f1cb5feb52d73 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/InstrumentedWriteLock.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/InstrumentedWriteLock.java
+@@ -26,7 +26,7 @@
+ import org.slf4j.Logger;
+ 
+ /**
+- * This is a wrap class of a <tt>WriteLock</tt>.
++ * This is a wrap class of a <code>WriteLock</code>.
+  * It extends the class {@link InstrumentedLock}, and can be used to track
+  * whether a specific write lock is being held for too long and log
+  * warnings if so.
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/ShutdownThreadsHelper.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/ShutdownThreadsHelper.java
+index dc13697f158ad..f026585be285a 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/ShutdownThreadsHelper.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/ShutdownThreadsHelper.java
+@@ -37,8 +37,8 @@ public class ShutdownThreadsHelper {
+ 
+   /**
+    * @param thread {@link Thread to be shutdown}
+-   * @return <tt>true</tt> if the thread is successfully interrupted,
+-   * <tt>false</tt> otherwise
++   * @return <code>true</code> if the thread is successfully interrupted,
++   * <code>false</code> otherwise
+    */
+   public static boolean shutdownThread(Thread thread) {
+     return shutdownThread(thread, SHUTDOWN_WAIT_MS);
+@@ -48,8 +48,8 @@ public static boolean shutdownThread(Thread thread) {
+    * @param thread {@link Thread to be shutdown}
+    * @param timeoutInMilliSeconds time to wait for thread to join after being
+    *                              interrupted
+-   * @return <tt>true</tt> if the thread is successfully interrupted,
+-   * <tt>false</tt> otherwise
++   * @return <code>true</code> if the thread is successfully interrupted,
++   * <code>false</code> otherwise
+    */
+   public static boolean shutdownThread(Thread thread,
+                                     long timeoutInMilliSeconds) {
+@@ -71,8 +71,8 @@ public static boolean shutdownThread(Thread thread,
+    * shutdownExecutorService.
+    *
+    * @param service {@link ExecutorService to be shutdown}
+-   * @return <tt>true</tt> if the service is terminated,
+-   * <tt>false</tt> otherwise
++   * @return <code>true</code> if the service is terminated,
++   * <code>false</code> otherwise
+    * @throws InterruptedException if the thread is interrupted.
+    */
+   public static boolean shutdownExecutorService(ExecutorService service)
+@@ -87,8 +87,8 @@ public static boolean shutdownExecutorService(ExecutorService service)
+    * @param timeoutInMs time to wait for {@link
+    * ExecutorService#awaitTermination(long, java.util.concurrent.TimeUnit)}
+    *                    calls in milli seconds.
+-   * @return <tt>true</tt> if the service is terminated,
+-   * <tt>false</tt> otherwise
++   * @return <code>true</code> if the service is terminated,
++   * <code>false</code> otherwise
+    * @throws InterruptedException if the thread is interrupted.
+    */
+   public static boolean shutdownExecutorService(ExecutorService service,
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/StringUtils.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/StringUtils.java
+index 14a745815750a..95e683e83778c 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/StringUtils.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/StringUtils.java
+@@ -245,7 +245,7 @@ public static String uriToString(URI[] uris){
+   /**
+    * @param str
+    *          The string array to be parsed into an URI array.
+-   * @return <tt>null</tt> if str is <tt>null</tt>, else the URI array
++   * @return <code>null</code> if str is <code>null</code>, else the URI array
+    *         equivalent to str.
+    * @throws IllegalArgumentException
+    *           If any string in str violates RFC&nbsp;2396.
+diff --git a/hadoop-common-project/hadoop-common/src/test/java/org/apache/hadoop/ipc/MiniRPCBenchmark.java b/hadoop-common-project/hadoop-common/src/test/java/org/apache/hadoop/ipc/MiniRPCBenchmark.java
+index 70ae639091421..4234f24006999 100644
+--- a/hadoop-common-project/hadoop-common/src/test/java/org/apache/hadoop/ipc/MiniRPCBenchmark.java
++++ b/hadoop-common-project/hadoop-common/src/test/java/org/apache/hadoop/ipc/MiniRPCBenchmark.java
+@@ -53,18 +53,18 @@
+  * The benchmark supports three authentication methods:
+  * <ol>
+  * <li>simple - no authentication. In order to enter this mode 
+- * the configuration file <tt>core-site.xml</tt> should specify
+- * <tt>hadoop.security.authentication = simple</tt>.
++ * the configuration file <code>core-site.xml</code> should specify
++ * <code>hadoop.security.authentication = simple</code>.
+  * This is the default mode.</li>
+  * <li>kerberos - kerberos authentication. In order to enter this mode 
+- * the configuration file <tt>core-site.xml</tt> should specify
+- * <tt>hadoop.security.authentication = kerberos</tt> and 
++ * the configuration file <code>core-site.xml</code> should specify
++ * <code>hadoop.security.authentication = kerberos</code> and
+  * the argument string should provide qualifying
+- * <tt>keytabFile</tt> and <tt>userName</tt> parameters.
++ * <code>keytabFile</code> and <code>userName</code> parameters.
+  * <li>delegation token - authentication using delegation token.
+  * In order to enter this mode the benchmark should provide all the
+  * mentioned parameters for kerberos authentication plus the
+- * <tt>useToken</tt> argument option.
++ * <code>useToken</code> argument option.
+  * </ol>
+  * Input arguments:
+  * <ul>
+diff --git a/hadoop-hdfs-project/hadoop-hdfs-client/src/main/java/org/apache/hadoop/hdfs/client/impl/BlockReaderLocalLegacy.java b/hadoop-hdfs-project/hadoop-hdfs-client/src/main/java/org/apache/hadoop/hdfs/client/impl/BlockReaderLocalLegacy.java
+index 1d002b6e4c63a..a69ae329c39f0 100644
+--- a/hadoop-hdfs-project/hadoop-hdfs-client/src/main/java/org/apache/hadoop/hdfs/client/impl/BlockReaderLocalLegacy.java
++++ b/hadoop-hdfs-project/hadoop-hdfs-client/src/main/java/org/apache/hadoop/hdfs/client/impl/BlockReaderLocalLegacy.java
+@@ -503,7 +503,7 @@ public synchronized int read(ByteBuffer buf) throws IOException {
+    *          byte buffer to write bytes to. If checksums are not required, buf
+    *          can have any number of bytes remaining, otherwise there must be a
+    *          multiple of the checksum chunk size remaining.
+-   * @return <tt>max(min(totalBytesRead, len) - offsetFromChunkBoundary, 0)</tt>
++   * @return <code>max(min(totalBytesRead, len) - offsetFromChunkBoundary, 0)</code>
+    *         that is, the the number of useful bytes (up to the amount
+    *         requested) readable from the buffer by the client.
+    */
+diff --git a/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/blockmanagement/DatanodeDescriptor.java b/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/blockmanagement/DatanodeDescriptor.java
+index a11fa1bac2598..1ec63e0ca83da 100755
+--- a/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/blockmanagement/DatanodeDescriptor.java
++++ b/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/blockmanagement/DatanodeDescriptor.java
+@@ -107,7 +107,7 @@ synchronized List<E> poll(int numBlocks) {
+     }
+ 
+     /**
+-     * Returns <tt>true</tt> if the queue contains the specified element.
++     * Returns <code>true</code> if the queue contains the specified element.
+      */
+     synchronized boolean contains(E e) {
+       return blockq.contains(e);
+diff --git a/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/namenode/EncryptionZoneManager.java b/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/namenode/EncryptionZoneManager.java
+index 7bf5879971615..2118b1d03fffa 100644
+--- a/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/namenode/EncryptionZoneManager.java
++++ b/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/namenode/EncryptionZoneManager.java
+@@ -369,7 +369,7 @@ String getFullPathName(Long nodeId) {
+   }
+ 
+   /**
+-   * Get the key name for an encryption zone. Returns null if <tt>iip</tt> is
++   * Get the key name for an encryption zone. Returns null if <code>iip</code> is
+    * not within an encryption zone.
+    * <p>
+    * Called while holding the FSDirectory lock.
+diff --git a/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/namenode/NameNode.java b/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/namenode/NameNode.java
+index a48cfdbe5957c..bcf56a86441d3 100644
+--- a/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/namenode/NameNode.java
++++ b/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/namenode/NameNode.java
+@@ -1120,7 +1120,7 @@ private void stopHttpServer() {
+    * <li>{@link StartupOption#IMPORT IMPORT} - import checkpoint</li>
+    * </ul>
+    * The option is passed via configuration field: 
+-   * <tt>dfs.namenode.startup</tt>
++   * <code>dfs.namenode.startup</code>
+    * 
+    * The conf will be modified to reflect the actual ports on which 
+    * the NameNode is up and running if the user passes the port as
+diff --git a/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/namenode/snapshot/DiffList.java b/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/namenode/snapshot/DiffList.java
+index 80ef538000977..7ad3981d9c4f2 100644
+--- a/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/namenode/snapshot/DiffList.java
++++ b/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/namenode/snapshot/DiffList.java
+@@ -100,7 +100,7 @@ public List<T> getMinListForRange(int startIndex, int endIndex,
+    * @param index index of the element to return
+    * @return the element at the specified position in this list
+    * @throws IndexOutOfBoundsException if the index is out of range
+-   *         (<tt>index &lt; 0 || index &gt;= size()</tt>)
++   *         (<code>index &lt; 0 || index &gt;= size()</code>)
+    */
+   T get(int index);
+ 
+diff --git a/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/tools/offlineImageViewer/FileDistributionCalculator.java b/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/tools/offlineImageViewer/FileDistributionCalculator.java
+index fbeea0f673c0e..6586d42f92d64 100644
+--- a/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/tools/offlineImageViewer/FileDistributionCalculator.java
++++ b/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/tools/offlineImageViewer/FileDistributionCalculator.java
+@@ -37,20 +37,20 @@
+ 
+ /**
+  * This is the tool for analyzing file sizes in the namespace image. In order to
+- * run the tool one should define a range of integers <tt>[0, maxSize]</tt> by
+- * specifying <tt>maxSize</tt> and a <tt>step</tt>. The range of integers is
+- * divided into segments of size <tt>step</tt>:
+- * <tt>[0, s<sub>1</sub>, ..., s<sub>n-1</sub>, maxSize]</tt>, and the visitor
++ * run the tool one should define a range of integers <code>[0, maxSize]</code> by
++ * specifying <code>maxSize</code> and a <code>step</code>. The range of integers is
++ * divided into segments of size <code>step</code>:
++ * <code>[0, s<sub>1</sub>, ..., s<sub>n-1</sub>, maxSize]</code>, and the visitor
+  * calculates how many files in the system fall into each segment
+- * <tt>[s<sub>i-1</sub>, s<sub>i</sub>)</tt>. Note that files larger than
+- * <tt>maxSize</tt> always fall into the very last segment.
++ * <code>[s<sub>i-1</sub>, s<sub>i</sub>)</code>. Note that files larger than
++ * <code>maxSize</code> always fall into the very last segment.
+  *
+  * <h3>Input.</h3>
+  * <ul>
+- * <li><tt>filename</tt> specifies the location of the image file;</li>
+- * <li><tt>maxSize</tt> determines the range <tt>[0, maxSize]</tt> of files
++ * <li><code>filename</code> specifies the location of the image file;</li>
++ * <li><code>maxSize</code> determines the range <code>[0, maxSize]</code> of files
+  * sizes considered by the visitor;</li>
+- * <li><tt>step</tt> the range is divided into segments of size step.</li>
++ * <li><code>step</code> the range is divided into segments of size step.</li>
+  * </ul>
+  *
+  * <h3>Output.</h3> The output file is formatted as a tab separated two column
+diff --git a/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/tools/offlineImageViewer/FileDistributionVisitor.java b/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/tools/offlineImageViewer/FileDistributionVisitor.java
+index 7dcc29998f335..a7e93fe586683 100644
+--- a/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/tools/offlineImageViewer/FileDistributionVisitor.java
++++ b/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/tools/offlineImageViewer/FileDistributionVisitor.java
+@@ -28,20 +28,20 @@
+  * <h3>Description.</h3>
+  * This is the tool for analyzing file sizes in the namespace image.
+  * In order to run the tool one should define a range of integers
+- * <tt>[0, maxSize]</tt> by specifying <tt>maxSize</tt> and a <tt>step</tt>.
+- * The range of integers is divided into segments of size <tt>step</tt>: 
+- * <tt>[0, s<sub>1</sub>, ..., s<sub>n-1</sub>, maxSize]</tt>,
++ * <code>[0, maxSize]</code> by specifying <code>maxSize</code> and a <code>step</code>.
++ * The range of integers is divided into segments of size <code>step</code>: 
++ * <code>[0, s<sub>1</sub>, ..., s<sub>n-1</sub>, maxSize]</code>,
+  * and the visitor calculates how many files in the system fall into 
+- * each segment <tt>[s<sub>i-1</sub>, s<sub>i</sub>)</tt>. 
+- * Note that files larger than <tt>maxSize</tt> always fall into 
++ * each segment <code>[s<sub>i-1</sub>, s<sub>i</sub>)</code>. 
++ * Note that files larger than <code>maxSize</code> always fall into 
+  * the very last segment.
+  * 
+  * <h3>Input.</h3>
+  * <ul>
+- * <li><tt>filename</tt> specifies the location of the image file;</li>
+- * <li><tt>maxSize</tt> determines the range <tt>[0, maxSize]</tt> of files
++ * <li><code>filename</code> specifies the location of the image file;</li>
++ * <li><code>maxSize</code> determines the range <code>[0, maxSize]</code> of files
+  * sizes considered by the visitor;</li>
+- * <li><tt>step</tt> the range is divided into segments of size step.</li>
++ * <li><code>step</code> the range is divided into segments of size step.</li>
+  * </ul>
+  *
+  * <h3>Output.</h3>
+diff --git a/hadoop-hdfs-project/hadoop-hdfs/src/test/java/org/apache/hadoop/hdfs/TestSafeMode.java b/hadoop-hdfs-project/hadoop-hdfs/src/test/java/org/apache/hadoop/hdfs/TestSafeMode.java
+index 905e3bf44f134..7264e182bf505 100644
+--- a/hadoop-hdfs-project/hadoop-hdfs/src/test/java/org/apache/hadoop/hdfs/TestSafeMode.java
++++ b/hadoop-hdfs-project/hadoop-hdfs/src/test/java/org/apache/hadoop/hdfs/TestSafeMode.java
+@@ -110,7 +110,7 @@ public void tearDown() throws IOException {
+    * Name-node should stay in automatic safe-mode.</li>
+    * <li>Enter safe mode manually.</li>
+    * <li>Start the data-node.</li>
+-   * <li>Wait longer than <tt>dfs.namenode.safemode.extension</tt> and 
++   * <li>Wait longer than <code>dfs.namenode.safemode.extension</code> and
+    * verify that the name-node is still in safe mode.</li>
+    * </ol>
+    *  
+diff --git a/hadoop-hdfs-project/hadoop-hdfs/src/test/java/org/apache/hadoop/hdfs/server/datanode/TestReadOnlySharedStorage.java b/hadoop-hdfs-project/hadoop-hdfs/src/test/java/org/apache/hadoop/hdfs/server/datanode/TestReadOnlySharedStorage.java
+index 106c515d49c08..788e91b02578c 100644
+--- a/hadoop-hdfs-project/hadoop-hdfs/src/test/java/org/apache/hadoop/hdfs/server/datanode/TestReadOnlySharedStorage.java
++++ b/hadoop-hdfs-project/hadoop-hdfs/src/test/java/org/apache/hadoop/hdfs/server/datanode/TestReadOnlySharedStorage.java
+@@ -205,7 +205,7 @@ private void validateNumberReplicas(int expectedReplicas) throws IOException {
+   }
+   
+   /**
+-   * Verify that <tt>READ_ONLY_SHARED</tt> replicas are <i>not</i> counted towards the overall 
++   * Verify that <code>READ_ONLY_SHARED</code> replicas are <i>not</i> counted towards the overall 
+    * replication count, but <i>are</i> included as replica locations returned to clients for reads.
+    */
+   @Test
+@@ -221,7 +221,7 @@ public void testReplicaCounting() throws Exception {
+   }
+ 
+   /**
+-   * Verify that the NameNode is able to still use <tt>READ_ONLY_SHARED</tt> replicas even 
++   * Verify that the NameNode is able to still use <code>READ_ONLY_SHARED</code> replicas even 
+    * when the single NORMAL replica is offline (and the effective replication count is 0).
+    */
+   @Test
+@@ -253,7 +253,7 @@ public void testNormalReplicaOffline() throws Exception {
+   }
+   
+   /**
+-   * Verify that corrupt <tt>READ_ONLY_SHARED</tt> replicas aren't counted 
++   * Verify that corrupt <code>READ_ONLY_SHARED</code> replicas aren't counted 
+    * towards the corrupt replicas total.
+    */
+   @Test
+diff --git a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/rm/preemption/AMPreemptionPolicy.java b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/rm/preemption/AMPreemptionPolicy.java
+index 85211f958d6c3..a49700d8e5587 100644
+--- a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/rm/preemption/AMPreemptionPolicy.java
++++ b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/rm/preemption/AMPreemptionPolicy.java
+@@ -109,7 +109,7 @@ public abstract class Context {
+    * TaskId}. Assigning a null is akin to remove all previous checkpoints for
+    * this task.
+    * @param taskId TaskID
+-   * @param cid Checkpoint to assign or <tt>null</tt> to remove it.
++   * @param cid Checkpoint to assign or <code>null</code> to remove it.
+    */
+   public void setCheckpointID(TaskId taskId, TaskCheckpointID cid);
+ 
+diff --git a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/FileOutputFormat.java b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/FileOutputFormat.java
+index 3932e5849ea14..a89f1f1cee999 100644
+--- a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/FileOutputFormat.java
++++ b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/FileOutputFormat.java
+@@ -185,7 +185,7 @@ public static Path getOutputPath(JobConf conf) {
+    *  is {@link FileOutputCommitter}. If <code>OutputCommitter</code> is not 
+    *  a <code>FileOutputCommitter</code>, the task's temporary output
+    *  directory is same as {@link #getOutputPath(JobConf)} i.e.
+-   *  <tt>${mapreduce.output.fileoutputformat.outputdir}$</tt></p>
++   *  <code>${mapreduce.output.fileoutputformat.outputdir}$</code></p>
+    *  
+    * <p>Some applications need to create/write-to side-files, which differ from
+    * the actual job-outputs.
+@@ -194,27 +194,27 @@ public static Path getOutputPath(JobConf conf) {
+    * (running simultaneously e.g. speculative tasks) trying to open/write-to the
+    * same file (path) on HDFS. Hence the application-writer will have to pick 
+    * unique names per task-attempt (e.g. using the attemptid, say 
+-   * <tt>attempt_200709221812_0001_m_000000_0</tt>), not just per TIP.</p> 
++   * <code>attempt_200709221812_0001_m_000000_0</code>), not just per TIP.</p>
+    * 
+    * <p>To get around this the Map-Reduce framework helps the application-writer 
+    * out by maintaining a special 
+-   * <tt>${mapreduce.output.fileoutputformat.outputdir}/_temporary/_${taskid}</tt> 
++   * <code>${mapreduce.output.fileoutputformat.outputdir}/_temporary/_${taskid}</code>
+    * sub-directory for each task-attempt on HDFS where the output of the 
+    * task-attempt goes. On successful completion of the task-attempt the files 
+-   * in the <tt>${mapreduce.output.fileoutputformat.outputdir}/_temporary/_${taskid}</tt> (only) 
+-   * are <i>promoted</i> to <tt>${mapreduce.output.fileoutputformat.outputdir}</tt>. Of course, the 
++   * in the <code>${mapreduce.output.fileoutputformat.outputdir}/_temporary/_${taskid}</code> (only)
++   * are <i>promoted</i> to <code>${mapreduce.output.fileoutputformat.outputdir}</code>. Of course, the
+    * framework discards the sub-directory of unsuccessful task-attempts. This 
+    * is completely transparent to the application.</p>
+    * 
+    * <p>The application-writer can take advantage of this by creating any 
+-   * side-files required in <tt>${mapreduce.task.output.dir}</tt> during execution 
++   * side-files required in <code>${mapreduce.task.output.dir}</code> during execution
+    * of his reduce-task i.e. via {@link #getWorkOutputPath(JobConf)}, and the 
+    * framework will move them out similarly - thus she doesn't have to pick 
+    * unique paths per task-attempt.</p>
+    * 
+-   * <p><i>Note</i>: the value of <tt>${mapreduce.task.output.dir}</tt> during 
++   * <p><i>Note</i>: the value of <code>${mapreduce.task.output.dir}</code> during
+    * execution of a particular task-attempt is actually 
+-   * <tt>${mapreduce.output.fileoutputformat.outputdir}/_temporary/_{$taskid}</tt>, and this value is 
++   * <code>${mapreduce.output.fileoutputformat.outputdir}/_temporary/_{$taskid}</code>, and this value is
+    * set by the map-reduce framework. So, just create any side-files in the 
+    * path  returned by {@link #getWorkOutputPath(JobConf)} from map/reduce 
+    * task to take advantage of this feature.</p>
+diff --git a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/JobConf.java b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/JobConf.java
+index db398e8dbdc65..d6d3c9ebfad0a 100644
+--- a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/JobConf.java
++++ b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/JobConf.java
+@@ -1873,8 +1873,8 @@ public String getJobEndNotificationURI() {
+    * Set the uri to be invoked in-order to send a notification after the job
+    * has completed (success/failure).
+    * 
+-   * <p>The uri can contain 2 special parameters: <tt>$jobId</tt> and 
+-   * <tt>$jobStatus</tt>. Those, if present, are replaced by the job's 
++   * <p>The uri can contain 2 special parameters: <code>$jobId</code> and 
++   * <code>$jobStatus</code>. Those, if present, are replaced by the job's 
+    * identifier and completion-status respectively.</p>
+    * 
+    * <p>This is typically used by application-writers to implement chaining of 
+diff --git a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/MapRunnable.java b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/MapRunnable.java
+index 7aa4f336ae522..e5f585e0fbc8f 100644
+--- a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/MapRunnable.java
++++ b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/MapRunnable.java
+@@ -37,7 +37,7 @@ public interface MapRunnable<K1, V1, K2, V2>
+     extends JobConfigurable {
+   
+   /** 
+-   * Start mapping input <tt>&lt;key, value&gt;</tt> pairs.
++   * Start mapping input <code>&lt;key, value&gt;</code> pairs.
+    *  
+    * <p>Mapping of input records to output records is complete when this method 
+    * returns.</p>
+diff --git a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/jobcontrol/Job.java b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/jobcontrol/Job.java
+index fd078372fd500..0b1a9786cabbe 100644
+--- a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/jobcontrol/Job.java
++++ b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/jobcontrol/Job.java
+@@ -143,7 +143,7 @@ protected synchronized void setState(int state) {
+    * is waiting to run, not during or afterwards.
+    * 
+    * @param dependingJob Job that this Job depends on.
+-   * @return <tt>true</tt> if the Job was added.
++   * @return <code>true</code> if the Job was added.
+    */
+   public synchronized boolean addDependingJob(Job dependingJob) {
+     return super.addDependingJob(dependingJob);
+diff --git a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/join/CompositeInputFormat.java b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/join/CompositeInputFormat.java
+index 40690e7541fdb..226363ac8caae 100644
+--- a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/join/CompositeInputFormat.java
++++ b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/join/CompositeInputFormat.java
+@@ -38,10 +38,10 @@
+  * and partitioned the same way.
+  *
+  * A user may define new join types by setting the property
+- * <tt>mapred.join.define.&lt;ident&gt;</tt> to a classname. In the expression
+- * <tt>mapred.join.expr</tt>, the identifier will be assumed to be a
++ * <code>mapred.join.define.&lt;ident&gt;</code> to a classname. In the expression
++ * <code>mapred.join.expr</code>, the identifier will be assumed to be a
+  * ComposableRecordReader.
+- * <tt>mapred.join.keycomparator</tt> can be a classname used to compare keys
++ * <code>mapred.join.keycomparator</code> can be a classname used to compare keys
+  * in the join.
+  * @see #setFormat
+  * @see JoinRecordReader
+@@ -66,9 +66,9 @@ public CompositeInputFormat() { }
+    *   class ::= @see java.lang.Class#forName(java.lang.String)
+    *   path  ::= @see org.apache.hadoop.fs.Path#Path(java.lang.String)
+    * }
+-   * Reads expression from the <tt>mapred.join.expr</tt> property and
+-   * user-supplied join types from <tt>mapred.join.define.&lt;ident&gt;</tt>
+-   *  types. Paths supplied to <tt>tbl</tt> are given as input paths to the
++   * Reads expression from the <code>mapred.join.expr</code> property and
++   * user-supplied join types from <code>mapred.join.define.&lt;ident&gt;</code>
++   *  types. Paths supplied to <code>tbl</code> are given as input paths to the
+    * InputFormat class listed.
+    * @see #compose(java.lang.String, java.lang.Class, java.lang.String...)
+    */
+diff --git a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/join/CompositeRecordReader.java b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/join/CompositeRecordReader.java
+index 0684268d2d79f..1bb0745d918da 100644
+--- a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/join/CompositeRecordReader.java
++++ b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/join/CompositeRecordReader.java
+@@ -61,8 +61,8 @@ public abstract class CompositeRecordReader<
+   protected abstract boolean combine(Object[] srcs, TupleWritable value);
+ 
+   /**
+-   * Create a RecordReader with <tt>capacity</tt> children to position
+-   * <tt>id</tt> in the parent reader.
++   * Create a RecordReader with <code>capacity</code> children to position
++   * <code>id</code> in the parent reader.
+    * The id of a root CompositeRecordReader is -1 by convention, but relying
+    * on this is not recommended.
+    */
+diff --git a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/join/OverrideRecordReader.java b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/join/OverrideRecordReader.java
+index 1671e6e895684..d36b776a94409 100644
+--- a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/join/OverrideRecordReader.java
++++ b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/join/OverrideRecordReader.java
+@@ -31,7 +31,7 @@
+ 
+ /**
+  * Prefer the &quot;rightmost&quot; data source for this key.
+- * For example, <tt>override(S1,S2,S3)</tt> will prefer values
++ * For example, <code>override(S1,S2,S3)</code> will prefer values
+  * from S3 over S2, and values from S2 over S1 for all keys
+  * emitted from all sources.
+  */
+diff --git a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/join/Parser.java b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/join/Parser.java
+index 3c7a991fd045e..96792c1e6662a 100644
+--- a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/join/Parser.java
++++ b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/join/Parser.java
+@@ -275,7 +275,7 @@ public WNode(String ident) {
+ 
+     /**
+      * Let the first actual define the InputFormat and the second define
+-     * the <tt>mapred.input.dir</tt> property.
++     * the <code>mapred.input.dir</code> property.
+      */
+     public void parse(List<Token> ll, JobConf job) throws IOException {
+       StringBuilder sb = new StringBuilder();
+diff --git a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/lib/TotalOrderPartitioner.java b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/lib/TotalOrderPartitioner.java
+index b06961e5cfdd3..98ca9318df490 100644
+--- a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/lib/TotalOrderPartitioner.java
++++ b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/lib/TotalOrderPartitioner.java
+@@ -43,7 +43,7 @@ public void configure(JobConf job) {
+ 
+   /**
+    * Set the path to the SequenceFile storing the sorted partition keyset.
+-   * It must be the case that for <tt>R</tt> reduces, there are <tt>R-1</tt>
++   * It must be the case that for <code>R</code> reduces, there are <code>R-1</code>
+    * keys in the SequenceFile.
+    * @deprecated Use 
+    * {@link #setPartitionFile(Configuration, Path)}
+diff --git a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/jobcontrol/ControlledJob.java b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/jobcontrol/ControlledJob.java
+index 48cde0e5f0040..249079b8e4f91 100644
+--- a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/jobcontrol/ControlledJob.java
++++ b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/jobcontrol/ControlledJob.java
+@@ -205,7 +205,7 @@ public List<ControlledJob> getDependentJobs() {
+    * is waiting to run, not during or afterwards.
+    * 
+    * @param dependingJob Job that this Job depends on.
+-   * @return <tt>true</tt> if the Job was added.
++   * @return <code>true</code> if the Job was added.
+    */
+   public synchronized boolean addDependingJob(ControlledJob dependingJob) {
+     if (this.state == State.WAITING) { //only allowed to add jobs when waiting
+diff --git a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/join/CompositeInputFormat.java b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/join/CompositeInputFormat.java
+index 6189a271bc3cb..b0b459afe2a0b 100644
+--- a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/join/CompositeInputFormat.java
++++ b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/join/CompositeInputFormat.java
+@@ -41,10 +41,10 @@
+  * and partitioned the same way.
+  *
+  * A user may define new join types by setting the property
+- * <tt>mapreduce.join.define.&lt;ident&gt;</tt> to a classname. 
+- * In the expression <tt>mapreduce.join.expr</tt>, the identifier will be
++ * <code>mapreduce.join.define.&lt;ident&gt;</code> to a classname.
++ * In the expression <code>mapreduce.join.expr</code>, the identifier will be
+  * assumed to be a ComposableRecordReader.
+- * <tt>mapreduce.join.keycomparator</tt> can be a classname used to compare 
++ * <code>mapreduce.join.keycomparator</code> can be a classname used to compare
+  * keys in the join.
+  * @see #setFormat
+  * @see JoinRecordReader
+@@ -73,9 +73,9 @@ public CompositeInputFormat() { }
+    *   class ::= @see java.lang.Class#forName(java.lang.String)
+    *   path  ::= @see org.apache.hadoop.fs.Path#Path(java.lang.String)
+    * }
+-   * Reads expression from the <tt>mapreduce.join.expr</tt> property and
+-   * user-supplied join types from <tt>mapreduce.join.define.&lt;ident&gt;</tt>
+-   *  types. Paths supplied to <tt>tbl</tt> are given as input paths to the
++   * Reads expression from the <code>mapreduce.join.expr</code> property and
++   * user-supplied join types from <code>mapreduce.join.define.&lt;ident&gt;</code>
++   *  types. Paths supplied to <code>tbl</code> are given as input paths to the
+    * InputFormat class listed.
+    * @see #compose(java.lang.String, java.lang.Class, java.lang.String...)
+    */
+diff --git a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/join/CompositeRecordReader.java b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/join/CompositeRecordReader.java
+index 40f3570cb59a2..45e3224a3fe08 100644
+--- a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/join/CompositeRecordReader.java
++++ b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/join/CompositeRecordReader.java
+@@ -67,8 +67,8 @@ public abstract class CompositeRecordReader<
+   protected X value;
+ 
+   /**
+-   * Create a RecordReader with <tt>capacity</tt> children to position
+-   * <tt>id</tt> in the parent reader.
++   * Create a RecordReader with <code>capacity</code> children to position
++   * <code>id</code> in the parent reader.
+    * The id of a root CompositeRecordReader is -1 by convention, but relying
+    * on this is not recommended.
+    */
+diff --git a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/join/OverrideRecordReader.java b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/join/OverrideRecordReader.java
+index 5678445f11ba8..2396e9daa42da 100644
+--- a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/join/OverrideRecordReader.java
++++ b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/join/OverrideRecordReader.java
+@@ -33,7 +33,7 @@
+ 
+ /**
+  * Prefer the &quot;rightmost&quot; data source for this key.
+- * For example, <tt>override(S1,S2,S3)</tt> will prefer values
++ * For example, <code>override(S1,S2,S3)</code> will prefer values
+  * from S3 over S2, and values from S2 over S1 for all keys
+  * emitted from all sources.
+  */
+diff --git a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/join/Parser.java b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/join/Parser.java
+index c557e14136622..68cf31025943f 100644
+--- a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/join/Parser.java
++++ b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/join/Parser.java
+@@ -290,7 +290,7 @@ public WNode(String ident) {
+ 
+     /**
+      * Let the first actual define the InputFormat and the second define
+-     * the <tt>mapred.input.dir</tt> property.
++     * the <code>mapred.input.dir</code> property.
+      */
+     @Override
+     public void parse(List<Token> ll, Configuration conf) throws IOException {
+diff --git a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/join/TupleWritable.java b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/join/TupleWritable.java
+index aa541f3640d3a..c48f925b9833f 100644
+--- a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/join/TupleWritable.java
++++ b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/join/TupleWritable.java
+@@ -144,7 +144,7 @@ public void remove() {
+ 
+   /**
+    * Convert Tuple to String as in the following.
+-   * <tt>[&lt;child1&gt;,&lt;child2&gt;,...,&lt;childn&gt;]</tt>
++   * <code>[&lt;child1&gt;,&lt;child2&gt;,...,&lt;childn&gt;]</code>
+    */
+   public String toString() {
+     StringBuilder buf = new StringBuilder("[");
+diff --git a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/output/FileOutputFormat.java b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/output/FileOutputFormat.java
+index 2b1f7e37ebe75..5dd572835ccff 100644
+--- a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/output/FileOutputFormat.java
++++ b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/output/FileOutputFormat.java
+@@ -208,15 +208,15 @@ public static Path getOutputPath(JobContext job) {
+    * (running simultaneously e.g. speculative tasks) trying to open/write-to the
+    * same file (path) on HDFS. Hence the application-writer will have to pick 
+    * unique names per task-attempt (e.g. using the attemptid, say 
+-   * <tt>attempt_200709221812_0001_m_000000_0</tt>), not just per TIP.</p> 
++   * <code>attempt_200709221812_0001_m_000000_0</code>), not just per TIP.</p>
+    * 
+    * <p>To get around this the Map-Reduce framework helps the application-writer 
+    * out by maintaining a special 
+-   * <tt>${mapreduce.output.fileoutputformat.outputdir}/_temporary/_${taskid}</tt> 
++   * <code>${mapreduce.output.fileoutputformat.outputdir}/_temporary/_${taskid}</code>
+    * sub-directory for each task-attempt on HDFS where the output of the 
+    * task-attempt goes. On successful completion of the task-attempt the files 
+-   * in the <tt>${mapreduce.output.fileoutputformat.outputdir}/_temporary/_${taskid}</tt> (only) 
+-   * are <i>promoted</i> to <tt>${mapreduce.output.fileoutputformat.outputdir}</tt>. Of course, the 
++   * in the <code>${mapreduce.output.fileoutputformat.outputdir}/_temporary/_${taskid}</code> (only)
++   * are <i>promoted</i> to <code>${mapreduce.output.fileoutputformat.outputdir}</code>. Of course, the
+    * framework discards the sub-directory of unsuccessful task-attempts. This 
+    * is completely transparent to the application.</p>
+    * 
+diff --git a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/partition/TotalOrderPartitioner.java b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/partition/TotalOrderPartitioner.java
+index c19724e842d26..25967f92fa8bd 100644
+--- a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/partition/TotalOrderPartitioner.java
++++ b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/partition/TotalOrderPartitioner.java
+@@ -65,8 +65,8 @@ public TotalOrderPartitioner() { }
+   /**
+    * Read in the partition file and build indexing data structures.
+    * If the keytype is {@link org.apache.hadoop.io.BinaryComparable} and
+-   * <tt>total.order.partitioner.natural.order</tt> is not false, a trie
+-   * of the first <tt>total.order.partitioner.max.trie.depth</tt>(2) + 1 bytes
++   * <code>total.order.partitioner.natural.order</code> is not false, a trie
++   * of the first <code>total.order.partitioner.max.trie.depth</code>(2) + 1 bytes
+    * will be built. Otherwise, keys will be located using a binary search of
+    * the partition keyset using the {@link org.apache.hadoop.io.RawComparator}
+    * defined for this job. The input file must be sorted with the same
+@@ -128,7 +128,7 @@ public int getPartition(K key, V value, int numPartitions) {
+ 
+   /**
+    * Set the path to the SequenceFile storing the sorted partition keyset.
+-   * It must be the case that for <tt>R</tt> reduces, there are <tt>R-1</tt>
++   * It must be the case that for <code>R</code> reduces, there are <code>R-1</code>
+    * keys in the SequenceFile.
+    */
+   public static void setPartitionFile(Configuration conf, Path p) {
+@@ -156,7 +156,7 @@ interface Node<T> {
+ 
+   /**
+    * Base class for trie nodes. If the keytype is memcomp-able, this builds
+-   * tries of the first <tt>total.order.partitioner.max.trie.depth</tt>
++   * tries of the first <code>total.order.partitioner.max.trie.depth</code>
+    * bytes.
+    */
+   static abstract class TrieNode implements Node<BinaryComparable> {
+@@ -171,7 +171,7 @@ int getLevel() {
+ 
+   /**
+    * For types that are not {@link org.apache.hadoop.io.BinaryComparable} or
+-   * where disabled by <tt>total.order.partitioner.natural.order</tt>,
++   * where disabled by <code>total.order.partitioner.natural.order</code>,
+    * search the partition keyset with a binary search.
+    */
+   class BinarySearchNode implements Node<K> {
+diff --git a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/fs/AccumulatingReducer.java b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/fs/AccumulatingReducer.java
+index b6313494e4542..eb0972b30f5ad 100644
+--- a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/fs/AccumulatingReducer.java
++++ b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/fs/AccumulatingReducer.java
+@@ -31,13 +31,13 @@
+  * The type is specified in the key part of the key-value pair 
+  * as a prefix to the key in the following way
+  * <p>
+- * <tt>type:key</tt>
++ * <code>type:key</code>
+  * <p>
+  * The values are accumulated according to the types:
+  * <ul>
+- * <li><tt>s:</tt> - string, concatenate</li>
+- * <li><tt>f:</tt> - float, summ</li>
+- * <li><tt>l:</tt> - long, summ</li>
++ * <li><code>s:</code> - string, concatenate</li>
++ * <li><code>f:</code> - float, summ</li>
++ * <li><code>l:</code> - long, summ</li>
+  * </ul>
+  * 
+  */
+diff --git a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/fs/IOMapperBase.java b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/fs/IOMapperBase.java
+index ddd2d2f126936..7ded7a1e639ed 100644
+--- a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/fs/IOMapperBase.java
++++ b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/fs/IOMapperBase.java
+@@ -109,8 +109,8 @@ abstract void collectStats(OutputCollector<Text, Text> output,
+    * Map file name and offset into statistical data.
+    * <p>
+    * The map task is to get the 
+-   * <tt>key</tt>, which contains the file name, and the 
+-   * <tt>value</tt>, which is the offset within the file.
++   * <code>key</code>, which contains the file name, and the
++   * <code>value</code>, which is the offset within the file.
+    * 
+    * The parameters are passed to the abstract method 
+    * {@link #doIO(Reporter,String,long)}, which performs the io operation, 
+diff --git a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/fs/JHLogAnalyzer.java b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/fs/JHLogAnalyzer.java
+index 8937bdafe35cd..125dad5cbe14d 100644
+--- a/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/fs/JHLogAnalyzer.java
++++ b/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/fs/JHLogAnalyzer.java
+@@ -76,7 +76,7 @@
+  * specific attempt A during hour h.
+  * The tool then sums all slots for all attempts for every hour.
+  * The result is the slot hour utilization of the cluster:
+- * <tt>slotTime(h) = SUM<sub>A</sub> slotTime(A,h)</tt>.
++ * <code>slotTime(h) = SUM<sub>A</sub> slotTime(A,h)</code>.
+  * <p>
+  * Log analyzer calculates slot hours for <em>MAP</em> and <em>REDUCE</em> 
+  * attempts separately.
+@@ -88,8 +88,8 @@
+  * <p>
+  * Map-reduce clusters are usually configured to have a fixed number of MAP 
+  * and REDUCE slots per node. Thus the maximal possible number of slots on
+- * the cluster is <tt>total_slots = total_nodes * slots_per_node</tt>.
+- * Effective slot hour cannot exceed <tt>total_slots</tt> for successful
++ * the cluster is <code>total_slots = total_nodes * slots_per_node</code>.
++ * Effective slot hour cannot exceed <code>total_slots</code> for successful
+  * attempts.
+  * <p>
+  * <em>Pending time</em> characterizes the wait time of attempts.
+@@ -106,39 +106,39 @@
+  * The following input parameters can be specified in the argument string
+  * to the job log analyzer:
+  * <ul>
+- * <li><tt>-historyDir inputDir</tt> specifies the location of the directory
++ * <li><code>-historyDir inputDir</code> specifies the location of the directory
+  * where analyzer will be looking for job history log files.</li>
+- * <li><tt>-resFile resultFile</tt> the name of the result file.</li>
+- * <li><tt>-usersIncluded | -usersExcluded userList</tt> slot utilization and 
++ * <li><code>-resFile resultFile</code> the name of the result file.</li>
++ * <li><code>-usersIncluded | -usersExcluded userList</code> slot utilization and
+  * pending time can be calculated for all or for all but the specified users.
+  * <br>
+- * <tt>userList</tt> is a comma or semicolon separated list of users.</li>
+- * <li><tt>-gzip</tt> is used if history log files are compressed.
++ * <code>userList</code> is a comma or semicolon separated list of users.</li>
++ * <li><code>-gzip</code> is used if history log files are compressed.
+  * Only {@link GzipCodec} is currently supported.</li>
+- * <li><tt>-jobDelimiter pattern</tt> one can concatenate original log files into 
++ * <li><code>-jobDelimiter pattern</code> one can concatenate original log files into
+  * larger file(s) with the specified delimiter to recognize the end of the log
+  * for one job from the next one.<br>
+- * <tt>pattern</tt> is a java regular expression
++ * <code>pattern</code> is a java regular expression
+  * {@link java.util.regex.Pattern}, which should match only the log delimiters.
+  * <br>
+- * E.g. pattern <tt>".!!FILE=.*!!"</tt> matches delimiters, which contain
++ * E.g. pattern <code>".!!FILE=.*!!"</code> matches delimiters, which contain
+  * the original history log file names in the following form:<br>
+- * <tt>"$!!FILE=my.job.tracker.com_myJobId_user_wordcount.log!!"</tt></li>
+- * <li><tt>-clean</tt> cleans up default directories used by the analyzer.</li>
+- * <li><tt>-test</tt> test one file locally and exit;
++ * <code>"$!!FILE=my.job.tracker.com_myJobId_user_wordcount.log!!"</code></li>
++ * <li><code>-clean</code> cleans up default directories used by the analyzer.</li>
++ * <li><code>-test</code> test one file locally and exit;
+  * does not require map-reduce.</li>
+- * <li><tt>-help</tt> print usage.</li>
++ * <li><code>-help</code> print usage.</li>
+  * </ul>
+  * 
+  * <h3>Output.</h3>
+  * The output file is formatted as a tab separated table consisting of four
+- * columns: <tt>SERIES, PERIOD, TYPE, SLOT_HOUR</tt>.
++ * columns: <code>SERIES, PERIOD, TYPE, SLOT_HOUR</code>.
+  * <ul>
+- * <li><tt>SERIES</tt> one of the four statistical series;</li>
+- * <li><tt>PERIOD</tt> the start of the time interval in the following format:
+- * <tt>"yyyy-mm-dd hh:mm:ss"</tt>;</li>
+- * <li><tt>TYPE</tt> the slot type, e.g. MAP or REDUCE;</li>
+- * <li><tt>SLOT_HOUR</tt> the value of the slot usage during this 
++ * <li><code>SERIES</code> one of the four statistical series;</li>
++ * <li><code>PERIOD</code> the start of the time interval in the following format:
++ * <code>"yyyy-mm-dd hh:mm:ss"</code>;</li>
++ * <li><code>TYPE</code> the slot type, e.g. MAP or REDUCE;</li>
++ * <li><code>SLOT_HOUR</code> the value of the slot usage during this
+  * time interval.</li>
+  * </ul>
+  */
+diff --git a/hadoop-mapreduce-project/hadoop-mapreduce-examples/src/main/java/org/apache/hadoop/examples/pi/package.html b/hadoop-mapreduce-project/hadoop-mapreduce-examples/src/main/java/org/apache/hadoop/examples/pi/package.html
+index 91484aa49c4c2..9fa0c41e0ac3a 100644
+--- a/hadoop-mapreduce-project/hadoop-mapreduce-examples/src/main/java/org/apache/hadoop/examples/pi/package.html
++++ b/hadoop-mapreduce-project/hadoop-mapreduce-examples/src/main/java/org/apache/hadoop/examples/pi/package.html
+@@ -23,7 +23,7 @@
+   for large n, say n &gt; 100,000,000.
+   For computing the lower bits of &pi;, consider using <i>bbp</i>.
+ 
+-  <h3>The distbbp Program</h3>
++  <h2>The distbbp Program</h2>
+   The main class is DistBbp
+   and the actually computation is done by DistSum jobs.
+   The steps for launching the jobs are:
+@@ -39,8 +39,10 @@ <h3>The distbbp Program</h3>
+     <li>Combine the job outputs and print the &pi; bits.</li>
+   </ol>
+ 
+-<table summary="The Bits of Pi"><tr valign=top><td width=420>
+-  <h3>The Bits of &pi;</h3>
++<table>
++<caption>"The Bits of Pi"</caption>
++<tr><td>
++  <h2>The Bits of &pi;</h2>
+   <p>
+ The table on the right are the results computed by distbbp.
+ </p>
+@@ -56,7 +58,7 @@ <h3>The Bits of &pi;</h3>
+     <li>The computations in Row 13 and Row 14 were completed on May 20, 2009. 
+         It seems that the corresponding bits were never computed before.</li>
+ </ul></li>
+-<li>The first part of Row 15 (<tt>6216B06</tt>)
++<li>The first part of Row 15 (<code>6216B06</code>)
+ 
+ <ul><li>The first 30% of the computation was done in idle cycles of some 
+         clusters spread over 20 days.</li>
+@@ -69,7 +71,7 @@ <h3>The Bits of &pi;</h3>
+         <a href="http://yahoohadoop.tumblr.com/post/98338598026/hadoop-computes-the-10-15-1st-bit-of-%CF%80">this YDN blog</a>.</li>
+ 
+ </ul></li>
+-<li>The second part of Row 15 (<tt>D3611</tt>)
++<li>The second part of Row 15 (<code>D3611</code>)
+ <ul><li>The starting position is 1,000,000,000,000,053, totally 20 bits.</li>
+     <li>Two computations, at positions <i>n</i> and <i>n</i>+4, were performed.
+     <li>A single computation was divided into 14,000 jobs
+@@ -85,42 +87,42 @@ <h3>The Bits of &pi;</h3>
+         computed ever in the history.</li>
+ </ul></li>
+ </ul>
+-</td><td width=20></td><td>
+-<table border=1 width=400 cellpadding=5 summary="Pi in hex">
+-<tr><th width=30></th><th>Position <i>n</i></th><th>&pi; bits (in hex) starting at <i>n</i></th></tr>
+-
+-<tr><td align=right>0</td><td align=right>1</td><td><tt>243F6A8885A3</tt><sup>*</sup></td></tr>
+-<tr><td align=right>1</td><td align=right>11</td><td><tt>FDAA22168C23</tt></td></tr>
+-<tr><td align=right>2</td><td align=right>101</td><td><tt>3707344A409</tt></td></tr>
+-<tr><td align=right>3</td><td align=right>1,001</td><td><tt>574E69A458F</tt></td></tr>
+-
+-<tr><td align=right>4</td><td align=right>10,001</td><td><tt>44EC5716F2B</tt></td></tr>
+-<tr><td align=right>5</td><td align=right>100,001</td><td><tt>944F7A204</tt></td></tr>
+-<tr><td align=right>6</td><td align=right>1,000,001</td><td><tt>6FFFA4103</tt></td></tr>
+-<tr><td align=right>7</td><td align=right>10,000,001</td><td><tt>6CFDD54E3</tt></td></tr>
+-<tr><td align=right>8</td><td align=right>100,000,001</td><td><tt>A306CFA7</tt></td></tr>
+-
+-<tr><td align=right>9</td><td align=right>1,000,000,001</td><td><tt>3E08FF2B</tt></td></tr>
+-<tr><td align=right>10</td><td align=right>10,000,000,001</td><td><tt>0A8BD8C0</tt></td></tr>
+-<tr><td align=right>11</td><td align=right>100,000,000,001</td><td><tt>B2238C1</tt></td></tr>
+-<tr><td align=right>12</td><td align=right>1,000,000,000,001</td><td><tt>0FEE563</tt></td></tr>
+-<tr><td align=right>13</td><td align=right>10,000,000,000,001</td><td><tt>896DC3</tt></td></tr>
+-
+-<tr><td align=right>14</td><td align=right>100,000,000,000,001</td><td><tt>C216EC</tt></td></tr>
+-<tr><td align=right>15</td><td align=right>1,000,000,000,000,001</td><td><tt>6216B06</tt> ... <tt>D3611</tt></td></tr>
++</td><td></td><td>
++<table border=1><caption>"Pi in hex"</caption>
++<tr><th></th><th>Position <i>n</i></th><th>&pi; bits (in hex) starting at <i>n</i></th></tr>
++
++<tr><td>0</td><td>1</td><td><code>243F6A8885A3</code><sup>*</sup></td></tr>
++<tr><td>1</td><td>11</td><td><code>FDAA22168C23</code></td></tr>
++<tr><td>2</td><td>101</td><td><code>3707344A409</code></td></tr>
++<tr><td>3</td><td>1,001</td><td><code>574E69A458F</code></td></tr>
++
++<tr><td>4</td><td>10,001</td><td><code>44EC5716F2B</code></td></tr>
++<tr><td>5</td><td>100,001</td><td><code>944F7A204</code></td></tr>
++<tr><td>6</td><td>1,000,001</td><td><code>6FFFA4103</code></td></tr>
++<tr><td>7</td><td>10,000,001</td><td><code>6CFDD54E3</code></td></tr>
++<tr><td>8</td><td>100,000,001</td><td><code>A306CFA7</code></td></tr>
++
++<tr><td>9</td><td>1,000,000,001</td><td><code>3E08FF2B</code></td></tr>
++<tr><td>10</td><td>10,000,000,001</td><td><code>0A8BD8C0</code></td></tr>
++<tr><td>11</td><td>100,000,000,001</td><td><code>B2238C1</code></td></tr>
++<tr><td>12</td><td>1,000,000,000,001</td><td><code>0FEE563</code></td></tr>
++<tr><td>13</td><td>10,000,000,000,001</td><td><code>896DC3</code></td></tr>
++
++<tr><td>14</td><td>100,000,000,000,001</td><td><code>C216EC</code></td></tr>
++<tr><td>15</td><td>1,000,000,000,000,001</td><td><code>6216B06</code> ... <code>D3611</code></td></tr>
+ </table>
+ 
+ <sup>*</sup>
+ By representing &pi; in decimal, hexadecimal and binary, we have
+ 
+-<table summary="Pi in various formats"><tr>
+-  <td>&pi;</td><td>=</td><td><tt>3.1415926535 8979323846 2643383279</tt> ...</td>
++<table><caption>"Pi in various formats"</caption><tr>
++  <td>&pi;</td><td>=</td><td><code>3.1415926535 8979323846 2643383279</code> ...</td>
+ </tr><tr>
+-  <td></td><td>=</td><td><tt>3.243F6A8885 A308D31319 8A2E037073</tt> ...</td>
++  <td></td><td>=</td><td><code>3.243F6A8885 A308D31319 8A2E037073</code> ...</td>
+ </tr><tr>
+-  <td></td><td>=</td><td><tt>11.0010010000 1111110110 1010100010</tt> ...</td>
++  <td></td><td>=</td><td><code>11.0010010000 1111110110 1010100010</code> ...</td>
+ </tr></table>
+-The first ten bits of &pi; are <tt>0010010000</tt>.
++The first ten bits of &pi; are <code>0010010000</code>.
+ </td></tr></table>
+ 
+ 
+@@ -130,7 +132,8 @@ <h3>Command Line Usages</h3>
+ $ hadoop org.apache.hadoop.examples.pi.DistBbp \
+          &lt;b&gt; &lt;nThreads&gt; &lt;nJobs&gt; &lt;type&gt; &lt;nPart&gt; &lt;remoteDir&gt; &lt;localDir&gt;</pre>
+   And the parameters are:
+-  <table summary="command line option">
++  <table>
++    <caption>"command line option"</caption>
+     <tr>
+       <td>&lt;b&gt;</td>
+       <td>The number of bits to skip, i.e. compute the (b+1)th position.</td>
+diff --git a/hadoop-tools/hadoop-gridmix/src/main/java/org/apache/hadoop/mapred/gridmix/FilePool.java b/hadoop-tools/hadoop-gridmix/src/main/java/org/apache/hadoop/mapred/gridmix/FilePool.java
+index 9a0cca380bcbd..9fbad6b7a9817 100644
+--- a/hadoop-tools/hadoop-gridmix/src/main/java/org/apache/hadoop/mapred/gridmix/FilePool.java
++++ b/hadoop-tools/hadoop-gridmix/src/main/java/org/apache/hadoop/mapred/gridmix/FilePool.java
+@@ -128,7 +128,7 @@ static abstract class Node {
+ 
+     /**
+      * Return a set of files whose cumulative size is at least
+-     * <tt>targetSize</tt>.
++     * <code>targetSize</code>.
+      * TODO Clearly size is not the only criterion, e.g. refresh from
+      * generated data without including running task output, tolerance
+      * for permission issues, etc.
+diff --git a/hadoop-tools/hadoop-streaming/src/main/java/org/apache/hadoop/streaming/io/IdentifierResolver.java b/hadoop-tools/hadoop-streaming/src/main/java/org/apache/hadoop/streaming/io/IdentifierResolver.java
+index b0cd5b4fdb733..9db4087c0cb88 100644
+--- a/hadoop-tools/hadoop-streaming/src/main/java/org/apache/hadoop/streaming/io/IdentifierResolver.java
++++ b/hadoop-tools/hadoop-streaming/src/main/java/org/apache/hadoop/streaming/io/IdentifierResolver.java
+@@ -26,7 +26,7 @@
+ /**
+  * This class is used to resolve a string identifier into the required IO
+  * classes. By extending this class and pointing the property
+- * <tt>stream.io.identifier.resolver.class</tt> to this extension, additional
++ * <code>stream.io.identifier.resolver.class</code> to this extension, additional
+  * IO classes can be added by external code.
+  */
+ public class IdentifierResolver {
+diff --git a/hadoop-tools/hadoop-streaming/src/main/java/org/apache/hadoop/streaming/package.html b/hadoop-tools/hadoop-streaming/src/main/java/org/apache/hadoop/streaming/package.html
+index be64426757e72..d7924e8d4e75d 100644
+--- a/hadoop-tools/hadoop-streaming/src/main/java/org/apache/hadoop/streaming/package.html
++++ b/hadoop-tools/hadoop-streaming/src/main/java/org/apache/hadoop/streaming/package.html
+@@ -19,7 +19,7 @@
+ 
+ <body>
+ 
+-<tt>Hadoop Streaming</tt> is a utility which allows users to create and run 
++<code>Hadoop Streaming</code> is a utility which allows users to create and run
+ Map-Reduce jobs with any executables (e.g. Unix shell utilities) as the mapper 
+ and/or the reducer.
+ 
+diff --git a/hadoop-tools/hadoop-streaming/src/main/java/org/apache/hadoop/typedbytes/package.html b/hadoop-tools/hadoop-streaming/src/main/java/org/apache/hadoop/typedbytes/package.html
+index 3494fbd8586cd..fb72cc3a8e594 100644
+--- a/hadoop-tools/hadoop-streaming/src/main/java/org/apache/hadoop/typedbytes/package.html
++++ b/hadoop-tools/hadoop-streaming/src/main/java/org/apache/hadoop/typedbytes/package.html
+@@ -22,11 +22,12 @@
+ Typed bytes are sequences of bytes in which the first byte is a type code. They are especially useful as a 
+ (simple and very straightforward) binary format for transferring data to and from Hadoop Streaming programs.
+ 
+-<h3>Type Codes</h3>
++<h2>Type Codes</h2>
+ 
+ Each typed bytes sequence starts with an unsigned byte that contains the type code. Possible values are:
+ 
+-<table border="1" cellpadding="2" summary="Type Codes">
++<table border="1">
++<caption>"Type Codes"</caption>
+ <tr><th>Code</th><th>Type</th></tr>
+ <tr><td><i>0</i></td><td>A sequence of bytes.</td></tr>
+ <tr><td><i>1</i></td><td>A byte.</td></tr>
+@@ -48,7 +49,8 @@ <h3>Subsequent Bytes</h3>
+ 
+ These are the subsequent bytes for the different type codes (everything is big-endian and unpadded):
+ 
+-<table border="1" cellpadding="2" summary="Subsequent Bytes">
++<table border="1">
++<caption>"Subsequent Bytes"</caption>
+ <tr><th>Code</th><th>Subsequent Bytes</th></tr>
+ <tr><td><i>0</i></td><td>&lt;32-bit signed integer&gt; &lt;as many bytes as indicated by the integer&gt;</td></tr>
+ <tr><td><i>1</i></td><td>&lt;signed byte&gt;</td></tr>
+diff --git a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-api/src/main/java/org/apache/hadoop/yarn/api/protocolrecords/SignalContainerRequest.java b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-api/src/main/java/org/apache/hadoop/yarn/api/protocolrecords/SignalContainerRequest.java
+index 28cc8ea5b4c50..d002071e6cc09 100644
+--- a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-api/src/main/java/org/apache/hadoop/yarn/api/protocolrecords/SignalContainerRequest.java
++++ b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-api/src/main/java/org/apache/hadoop/yarn/api/protocolrecords/SignalContainerRequest.java
+@@ -29,7 +29,7 @@
+  * <p>The request sent by the client to the <code>ResourceManager</code>
+  * or by the <code>ApplicationMaster</code> to the <code>NodeManager</code>
+  * to signal a container.
+- * @see SignalContainerCommand </p>
++ * @see SignalContainerCommand
+  */
+ @Public
+ @Evolving
+diff --git a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-applications/hadoop-yarn-services/hadoop-yarn-services-core/src/main/java/org/apache/hadoop/yarn/service/timelineservice/ServiceMetricsSink.java b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-applications/hadoop-yarn-services/hadoop-yarn-services-core/src/main/java/org/apache/hadoop/yarn/service/timelineservice/ServiceMetricsSink.java
+index ff4556f7cd7a3..c4417851a56a5 100644
+--- a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-applications/hadoop-yarn-services/hadoop-yarn-services-core/src/main/java/org/apache/hadoop/yarn/service/timelineservice/ServiceMetricsSink.java
++++ b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-applications/hadoop-yarn-services/hadoop-yarn-services-core/src/main/java/org/apache/hadoop/yarn/service/timelineservice/ServiceMetricsSink.java
+@@ -31,7 +31,7 @@
+  * adding the following to by This would actually be set as: <code>
+  * [prefix].sink.[some instance name].class
+  * =org.apache.hadoop.yarn.service.timelineservice.ServiceMetricsSink
+- * </code>, where <tt>prefix</tt> is "atsv2": and <tt>some instance name</tt> is
++ * </code>, where <code>prefix</code> is "atsv2": and <code>some instance name</code> is
+  * just any unique name, so properties can be differentiated if there are
+  * multiple sinks of the same type created
+  */
+diff --git a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-common/src/main/java/org/apache/hadoop/yarn/security/AdminACLsManager.java b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-common/src/main/java/org/apache/hadoop/yarn/security/AdminACLsManager.java
+index 949c6a2e27cc7..3ff53cce8b7c3 100644
+--- a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-common/src/main/java/org/apache/hadoop/yarn/security/AdminACLsManager.java
++++ b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-common/src/main/java/org/apache/hadoop/yarn/security/AdminACLsManager.java
+@@ -93,7 +93,7 @@ public UserGroupInformation getOwner() {
+    *
+    * @see YarnConfiguration#YARN_ACL_ENABLE
+    * @see YarnConfiguration#DEFAULT_YARN_ACL_ENABLE
+-   * @return <tt>true</tt> if ACLs are enabled
++   * @return <code>true</code> if ACLs are enabled
+    */
+   public boolean areACLsEnabled() {
+     return aclsEnabled;
+@@ -103,7 +103,7 @@ public boolean areACLsEnabled() {
+    * Returns whether the specified user/group is an administrator
+    *
+    * @param callerUGI user/group to to check
+-   * @return <tt>true</tt> if the UserGroupInformation specified
++   * @return <code>true</code> if the UserGroupInformation specified
+    *         is a member of the access control list for administrators
+    */
+   public boolean isAdmin(UserGroupInformation callerUGI) {
+diff --git a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-common/src/main/java/org/apache/hadoop/yarn/util/BoundedAppender.java b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-common/src/main/java/org/apache/hadoop/yarn/util/BoundedAppender.java
+index 6d582ca1ec799..423f029b9d59a 100644
+--- a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-common/src/main/java/org/apache/hadoop/yarn/util/BoundedAppender.java
++++ b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-common/src/main/java/org/apache/hadoop/yarn/util/BoundedAppender.java
+@@ -56,7 +56,7 @@
+  * }
+  * </pre>
+  * <p>
+- * Note that <tt>null</tt> values are {@link #append(CharSequence) append}ed
++ * Note that <code>null</code> values are {@link #append(CharSequence) append}ed
+  * just like in {@link StringBuilder#append(CharSequence) original
+  * implementation}.
+  * <p>
+diff --git a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-common/src/main/java/org/apache/hadoop/yarn/server/utils/LeveldbIterator.java b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-common/src/main/java/org/apache/hadoop/yarn/server/utils/LeveldbIterator.java
+index 463bee7ebab89..00b97aadc8a32 100644
+--- a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-common/src/main/java/org/apache/hadoop/yarn/server/utils/LeveldbIterator.java
++++ b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-common/src/main/java/org/apache/hadoop/yarn/server/utils/LeveldbIterator.java
+@@ -112,7 +112,7 @@ public void seekToLast() throws DBException {
+   }
+ 
+   /**
+-   * Returns <tt>true</tt> if the iteration has more elements.
++   * Returns <code>true</code> if the iteration has more elements.
+    */
+   public boolean hasNext() throws DBException {
+     try {
+diff --git a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-timelineservice-hbase/hadoop-yarn-server-timelineservice-hbase-common/src/main/java/org/apache/hadoop/yarn/server/timelineservice/storage/common/BaseTable.java b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-timelineservice-hbase/hadoop-yarn-server-timelineservice-hbase-common/src/main/java/org/apache/hadoop/yarn/server/timelineservice/storage/common/BaseTable.java
+index 433b35201644a..cac14eaa82b69 100644
+--- a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-timelineservice-hbase/hadoop-yarn-server-timelineservice-hbase-common/src/main/java/org/apache/hadoop/yarn/server/timelineservice/storage/common/BaseTable.java
++++ b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-timelineservice-hbase/hadoop-yarn-server-timelineservice-hbase-common/src/main/java/org/apache/hadoop/yarn/server/timelineservice/storage/common/BaseTable.java
+@@ -21,7 +21,7 @@
+ 
+ /**
+  * The base type of tables.
+- * @param T table type
++ * @param <T> table type
+  */
+ public abstract class BaseTable<T> {
+ }
+
+From 1b12f2d7c95054397abec4811822059e0b04e145 Mon Sep 17 00:00:00 2001
+From: Cheng Pan <chengpan@apache.org>
+Date: Thu, 1 Aug 2024 15:28:01 +0800
+Subject: [PATCH 2/2] Remove javadoc.skip.jdk11 and -html4
+
+---
+ hadoop-project/pom.xml          | 23 -----------------------
+ hadoop-tools/hadoop-aws/pom.xml |  1 -
+ 2 files changed, 24 deletions(-)
+
+diff --git a/hadoop-project/pom.xml b/hadoop-project/pom.xml
+index 33533dbbaedca..32a140a9de867 100644
+--- a/hadoop-project/pom.xml
++++ b/hadoop-project/pom.xml
+@@ -158,7 +158,6 @@
+ 
+     <!-- define the Java language version used by the compiler -->
+     <javac.version>1.8</javac.version>
+-    <javadoc.skip.jdk11>false</javadoc.skip.jdk11>
+ 
+     <!-- The java version enforced by the maven enforcer -->
+     <!-- more complex patterns can be used here, such as
+@@ -2719,28 +2718,6 @@
+         </dependencies>
+       </dependencyManagement>
+     </profile>
+-    <profile>
+-      <id>jdk11</id>
+-      <activation>
+-        <jdk>[11,)</jdk>
+-      </activation>
+-      <build>
+-        <plugins>
+-          <plugin>
+-            <groupId>org.apache.maven.plugins</groupId>
+-            <artifactId>maven-javadoc-plugin</artifactId>
+-            <configuration>
+-              <skip>${javadoc.skip.jdk11}</skip>
+-              <detectJavaApiLink>false</detectJavaApiLink>
+-              <additionalOptions>
+-                <!-- TODO: remove -html4 option to generate html5 docs when we stop supporting JDK8 -->
+-                <additionalOption>-html4</additionalOption>
+-              </additionalOptions>
+-            </configuration>
+-          </plugin>
+-        </plugins>
+-      </build>
+-    </profile>
+   </profiles>
+ 
+   <repositories>
+diff --git a/hadoop-tools/hadoop-aws/pom.xml b/hadoop-tools/hadoop-aws/pom.xml
+index 595413edc4f40..997f63b0dc15f 100644
+--- a/hadoop-tools/hadoop-aws/pom.xml
++++ b/hadoop-tools/hadoop-aws/pom.xml
+@@ -35,7 +35,6 @@
+     <file.encoding>UTF-8</file.encoding>
+     <downloadSources>true</downloadSources>
+     <hadoop.tmp.dir>${project.build.directory}/test</hadoop.tmp.dir>
+-    <javadoc.skip.jdk11>true</javadoc.skip.jdk11>
+ 
+     <!-- are scale tests enabled ? -->
+     <fs.s3a.scale.test.enabled>unset</fs.s3a.scale.test.enabled>
