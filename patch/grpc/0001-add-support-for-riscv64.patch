@@ -1,7 +1,7 @@
-From 9c5edc9fe5b54c6efa6e6f55cc0739add038d2c0 Mon Sep 17 00:00:00 2001
+From 49e635ffb88e8209695ef45d5648638a825dfebb Mon Sep 17 00:00:00 2001
 From: zhangxiangbo123 <imzhangxiangbo@gmail.com>
-Date: Wed, 11 Sep 2024 15:41:09 +0800
-Subject: [PATCH] add-support-for-riscv64
+Date: Mon, 16 Sep 2024 12:55:53 +0800
+Subject: [PATCH 1/2] add-support-for-riscv64
 
 ---
  build.gradle                            | 2 ++
@@ -9,8 +9,8 @@ Subject: [PATCH] add-support-for-riscv64
  buildscripts/kokoro/unix.sh             | 6 ++++--
  buildscripts/kokoro/upload_artifacts.sh | 3 +++
  buildscripts/make_dependencies.sh       | 6 ++++--
- compiler/build.gradle                   | 4 +++-
- compiler/check-artifact.sh              | 6 ++++++
+ compiler/build.gradle                   | 5 ++++-
+ compiler/check-artifact.sh              | 5 +++++
  settings.gradle                         | 2 +-
  8 files changed, 27 insertions(+), 6 deletions(-)
 
@@ -109,10 +109,18 @@ index 0940132ee..bf072c9d1 100755
    # the same source dir is used for 32 and 64 bit builds, so we need to clean stale data first
    make clean
 diff --git a/compiler/build.gradle b/compiler/build.gradle
-index c942442e6..18a959583 100644
+index c942442e6..1b114a35d 100644
 --- a/compiler/build.gradle
 +++ b/compiler/build.gradle
-@@ -72,6 +72,7 @@ model {
+@@ -60,6 +60,7 @@ model {
+             }
+             target("s390_64")
+             target("loongarch_64")
++	    target("riscv64")
+         }
+         clang(Clang) {
+         }
+@@ -72,6 +73,7 @@ model {
          aarch_64 { architecture "aarch_64" }
          s390_64 { architecture "s390_64" }
          loongarch_64 { architecture "loongarch_64" }
@@ -120,7 +128,7 @@ index c942442e6..18a959583 100644
      }
  
      components {
-@@ -82,7 +83,8 @@ model {
+@@ -82,7 +84,8 @@ model {
                  'ppcle_64',
                  'aarch_64',
                  's390_64',
@@ -131,17 +139,10 @@ index c942442e6..18a959583 100644
                  // If arch is not within the defined platforms, we do not specify the
                  // targetPlatform so that Gradle will choose what is appropriate.
 diff --git a/compiler/check-artifact.sh b/compiler/check-artifact.sh
-index 67f01aa97..f0e3fbda6 100755
+index 67f01aa97..2eaeac43f 100755
 --- a/compiler/check-artifact.sh
 +++ b/compiler/check-artifact.sh
-@@ -55,12 +55,15 @@ checkArch ()
-     format="$(objdump -f "$1" | grep -o "file format .*$" | grep -o "[^ ]*$")"
-     echo Format=$format
-     if [[ "$OS" == linux ]]; then
-+      host_machine="$(uname -m)";
-       if [[ "$ARCH" == x86_32 ]]; then
-         assertEq "$format" "elf32-i386" $LINENO
-       elif [[ "$ARCH" == x86_64 ]]; then
+@@ -61,6 +61,8 @@ checkArch ()
          assertEq "$format" "elf64-x86-64" $LINENO
        elif [[ "$ARCH" == aarch_64 ]]; then
          assertEq "$format" "elf64-little" $LINENO
@@ -150,7 +151,7 @@ index 67f01aa97..f0e3fbda6 100755
        elif [[ "$ARCH" == loongarch_64 ]]; then
          echo $format
  	assertEq "$format" "elf64-loongarch" $LINENO
-@@ -121,6 +124,9 @@ checkDependencies ()
+@@ -121,6 +123,9 @@ checkDependencies ()
      elif [[ "$ARCH" == ppcle_64 ]]; then
        dump_cmd='powerpc64le-linux-gnu-objdump -x '"$1"' |grep "NEEDED"'
        white_list="linux-vdso64\.so\.1\|libpthread\.so\.0\|libm\.so\.6\|libc\.so\.6\|ld64\.so\.2"
