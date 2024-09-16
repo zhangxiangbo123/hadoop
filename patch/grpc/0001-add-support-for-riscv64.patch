@@ -1,7 +1,7 @@
 From 49e635ffb88e8209695ef45d5648638a825dfebb Mon Sep 17 00:00:00 2001
 From: zhangxiangbo123 <imzhangxiangbo@gmail.com>
 Date: Mon, 16 Sep 2024 12:55:53 +0800
-Subject: [PATCH 1/2] add-support-for-riscv64
+Subject: [PATCH] add-support-for-riscv64
 
 ---
  build.gradle                            | 2 ++
