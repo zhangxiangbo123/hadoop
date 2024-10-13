@@ -1,0 +1,34 @@
+From 6c821ff7dc681dc5454b3c04ef276ee9e3ee5b96 Mon Sep 17 00:00:00 2001
+From: zhangxiangbo123 <imzhangxiangbo@gmail.com>
+Date: Sun, 13 Oct 2024 16:11:59 +0800
+Subject: [PATCH] upgrade-maven-plugins
+
+---
+ hadoop-project/pom.xml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/hadoop-project/pom.xml b/hadoop-project/pom.xml
+index 0ed96d087bc..e37cd6dfcc6 100644
+--- a/hadoop-project/pom.xml
++++ b/hadoop-project/pom.xml
+@@ -153,7 +153,7 @@
+ 
+     <protobuf-compile.version>3.5.1</protobuf-compile.version>
+     <grpc.version>1.10.0</grpc.version>
+-    <os-maven-plugin.version>1.7.0</os-maven-plugin.version>
++    <os-maven-plugin.version>1.7.1</os-maven-plugin.version>
+ 
+     <!-- define the Java language version used by the compiler -->
+     <javac.version>1.8</javac.version>
+@@ -191,7 +191,7 @@
+     <aws.eventstream.version>1.0.1</aws.eventstream.version>
+     <hsqldb.version>2.7.1</hsqldb.version>
+     <frontend-maven-plugin.version>1.11.2</frontend-maven-plugin.version>
+-    <jasmine-maven-plugin.version>2.1</jasmine-maven-plugin.version>
++    <jasmine-maven-plugin.version>2.2</jasmine-maven-plugin.version>
+     <phantomjs-maven-plugin.version>0.7</phantomjs-maven-plugin.version>
+     <yuicompressor-maven-plugin.version>1.5.1</yuicompressor-maven-plugin.version>
+     <maven-project-info-reports-plugin.version>2.9</maven-project-info-reports-plugin.version>
+-- 
+2.43.0
+

@@ -1,7 +1,7 @@
-From 31b3117baa7ecacd75e6d1da50d6d24634e74469 Mon Sep 17 00:00:00 2001
+From 89ad133dc0b860ecd5494591e50448265ae96151 Mon Sep 17 00:00:00 2001
 From: zhangxiangbo123 <imzhangxiangbo@gmail.com>
-Date: Thu, 22 Aug 2024 16:59:47 +0800
-Subject: [PATCH] Fix-build-on-riscv
+Date: Sun, 13 Oct 2024 16:16:34 +0800
+Subject: [PATCH] fix-build-on-riscv
 
 ---
  .../src/main/native/src/lib/primitives.h                      | 4 ++--
