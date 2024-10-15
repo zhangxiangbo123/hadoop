@@ -1,7 +1,7 @@
-From 89ad133dc0b860ecd5494591e50448265ae96151 Mon Sep 17 00:00:00 2001
+From 366823c4298a15dffcffae8e3f5c7fda8c161913 Mon Sep 17 00:00:00 2001
 From: zhangxiangbo123 <imzhangxiangbo@gmail.com>
-Date: Sun, 13 Oct 2024 16:16:34 +0800
-Subject: [PATCH] fix-build-on-riscv
+Date: Tue, 15 Oct 2024 09:54:25 +0800
+Subject: [PATCH] add-riscv-bswap-function
 
 ---
  .../src/main/native/src/lib/primitives.h                      | 4 ++--
