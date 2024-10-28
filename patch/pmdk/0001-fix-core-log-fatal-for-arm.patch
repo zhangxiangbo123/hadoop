@@ -1,0 +1,24 @@
+From 95f8f4d311dac60f6c279c7c7bf8f3b6cb451414 Mon Sep 17 00:00:00 2001
+From: zhangxiangbo123 <imzhangxiangbo@gmail.com>
+Date: Mon, 28 Oct 2024 11:19:05 +0800
+Subject: [PATCH] fix-core-log-fatal-for-arm
+
+---
+ src/libpmem2/aarch64/init.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/libpmem2/aarch64/init.c b/src/libpmem2/aarch64/init.c
+index d4dd8812b..325981415 100644
+--- a/src/libpmem2/aarch64/init.c
++++ b/src/libpmem2/aarch64/init.c
+@@ -9,6 +9,7 @@
+ #include "flush.h"
+ #include "out.h"
+ #include "pmem2_arch.h"
++#include "log_internal.h"
+ 
+ #ifndef HWCAP_DCPOP
+ #define HWCAP_DCPOP (1 << 16)
+-- 
+2.43.0
+
