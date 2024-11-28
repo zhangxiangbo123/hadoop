@@ -55,6 +55,8 @@ Requirements:
 
 	由于直接编译出的Protocol Buffers 3.7.1会缺少absl库的支持，而在RV上本身又需要重新编译3.21.12，而且编译3.21.12的速度要比编译3.7.1的速度快挺多。故直接在Protobuf 3.21.12中添加编译出的abseil，并用3.21.12来编译hadoop。
 
+**以下内容均在root用户下进行，故未区分需要在普通用户下使用sudo的指令。**
+
 ### **0. yum安装部分依赖**
 ```bash
 yum install -y gcc gcc-c++ gcc-gfortran libgcc
@@ -231,7 +233,7 @@ pushd grpc-java-1.53.0
 # 打补丁，添加grpc-java-1.53.0对riscv的支持
 patch -p1 < ../patch/grpc/0001-add-support-for-riscv64.patch
 
-# 将远端源换为本地源
+# 将远端源换位本地源
 sed -i "s,@HOME@,${HOME},g" build.gradle
 sed -i 's|https\\://services.gradle.org/distributions|file:///var/tmp/source|g' gradle/wrapper/gradle-wrapper.properties
 
