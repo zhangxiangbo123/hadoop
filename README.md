@@ -231,7 +231,7 @@ pushd grpc-java-1.53.0
 # 打补丁，添加grpc-java-1.53.0对riscv的支持
 patch -p1 < ../patch/grpc/0001-add-support-for-riscv64.patch
 
-# 将远端源换位本地源
+# 将远端源换为本地源
 sed -i "s,@HOME@,${HOME},g" build.gradle
 sed -i 's|https\\://services.gradle.org/distributions|file:///var/tmp/source|g' gradle/wrapper/gradle-wrapper.properties
 
